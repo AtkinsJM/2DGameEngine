@@ -2,9 +2,11 @@
 #include "Constants.h"
 #include "Game.h"
 #include "../lib/glm/glm.hpp"
+#include "EntityManager.h"
 
-glm::vec2 projectilePos = glm::vec2(0.0f, 0.0f);
-glm::vec2 projectileVelocity = glm::vec2(80.0f, 60.0f);
+
+EntityManager entityManager;
+SDL_Renderer* Game::renderer;
 
 Game::Game()
 {
@@ -69,10 +71,8 @@ void Game::Update()
     deltaTime = (deltaTime > MAX_DELTA_TIME) ? MAX_DELTA_TIME : deltaTime;
     // Set time of current frame
     ticksLastFrame = SDL_GetTicks();
-    
-    // Update projectile position
-    projectilePos += projectileVelocity * deltaTime;
-
+ 
+    //TODO call manager.update to update entities
 }
 
 void Game::Render()
@@ -82,9 +82,7 @@ void Game::Render()
     // Clear the back buffer
     SDL_RenderClear(renderer);
 
-    SDL_Rect projectile{(int)projectilePos.x, (int)projectilePos.y, 10, 10};
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer, &projectile);
+    //TODO: call manager.render to render all entities
 
     // Swap front and back buffers
     SDL_RenderPresent(renderer);

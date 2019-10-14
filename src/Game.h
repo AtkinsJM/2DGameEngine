@@ -16,10 +16,11 @@ class Game
         void Update();
         void Render();
         void Destroy();
+        void LoadLevel(int levelNumber);
+        static SDL_Renderer* renderer;
     private:
         bool isRunning;
         SDL_Window* window;
-        SDL_Renderer* renderer;
         int ticksLastFrame = 0;
 };
 
