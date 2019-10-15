@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "../lib/glm/glm.hpp"
 #include "EntityManager.h"
+#include "Components/TransformComponent.h"
+#include "Entity.h"
 
 
 EntityManager entityManager;
@@ -37,8 +39,20 @@ void Game::Initialise(int width, int height)
         std::cerr << "Error creating SDL renderer" << std::endl;
         return;
     }
+
+    LoadLevel(0);
+
     isRunning = true;
     return;
+}
+
+void Game::LoadLevel(int levelNumber)
+{
+    //TODO: add entities and their components
+    auto& newEntity = entityManager.AddEntity("Projectile");
+
+    //This line is dodgy...
+    newEntity.AddComponent<TransformComponent>(0, 0, 80, 60, 20, 20, 1);
 }
 
 void Game::ProcessInput()
@@ -72,7 +86,7 @@ void Game::Update()
     // Set time of current frame
     ticksLastFrame = SDL_GetTicks();
  
-    //TODO call manager.update to update entities
+    entityManager.Update(deltaTime);
 }
 
 void Game::Render()
@@ -82,7 +96,8 @@ void Game::Render()
     // Clear the back buffer
     SDL_RenderClear(renderer);
 
-    //TODO: call manager.render to render all entities
+    if(!entityManager.HasEntities()) { return; }
+    entityManager.Render();
 
     // Swap front and back buffers
     SDL_RenderPresent(renderer);

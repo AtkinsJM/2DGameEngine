@@ -1,6 +1,7 @@
 build:
 	g++ -w -std=c++14 -Wfatal-errors -static-libgcc -static-libstdc++ \
 	./src/*.cpp \
+	./src/Components/*.cpp \
 	-o game.exe \
 	-I"C:\libsdl\SDL2\include" \
 	-I"C:\libsdl\SDL2\lib" \

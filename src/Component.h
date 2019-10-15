@@ -7,10 +7,10 @@ class Component
 {
     public:
         Entity* owner;
-        virtual ~Component();
-        virtual void Initialise();
-        virtual void Update(float deltaTime);
-        virtual void Render();
+        virtual ~Component() {};
+        virtual void Initialise() {};
+        virtual void Update(float deltaTime) {};
+        virtual void Render() {};
 
     private:
 };
