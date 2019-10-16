@@ -32,3 +32,11 @@ Entity& EntityManager::AddEntity(std::string entityName)
     //entities.emplace_back(entity);
     return *entity;
 }
+
+void EntityManager::ListAllEntities()
+{
+    for(auto &entity : entities)
+    {
+        entity->DisplayInfo();
+    }
+}

@@ -4,10 +4,14 @@
 #include "../lib/glm/glm.hpp"
 #include "EntityManager.h"
 #include "Components/TransformComponent.h"
+#include "Components/SpriteComponent.h"
 #include "Entity.h"
+#include "AssetManager.h"
+#include <string>
 
 
 EntityManager entityManager;
+AssetManager* Game::assetManager = new AssetManager(&entityManager);
 SDL_Renderer* Game::renderer;
 
 Game::Game()
@@ -48,11 +52,27 @@ void Game::Initialise(int width, int height)
 
 void Game::LoadLevel(int levelNumber)
 {
-    //TODO: add entities and their components
-    auto& newEntity = entityManager.AddEntity("Projectile");
+    //Add new assets to AssetManager
+    std::string textureFilePath = "assets/images/tank-big-right.png";
+    assetManager->AddTexture("tank-image", textureFilePath.c_str());
+    //Add new entities and their components to EntityManager
 
-    //This line is dodgy...
+
+
+    auto& newEntity = entityManager.AddEntity("Projectile");
     newEntity.AddComponent<TransformComponent>(0, 0, 80, 60, 20, 20, 1);
+
+    auto& newEntity2 = entityManager.AddEntity("Projectile_2");
+    newEntity2.AddComponent<TransformComponent>(200, 0, 0, 100, 10, 10, 1);
+
+    auto& newEntity3 = entityManager.AddEntity("tank");
+    newEntity3.AddComponent<TransformComponent>(0, 300, 100, 0, 15, 15, 1);
+    newEntity3.AddComponent<SpriteComponent>("tank-image");
+
+     auto& newEntity4 = entityManager.AddEntity("Projectile_4");
+    newEntity4.AddComponent<TransformComponent>(0, 600, 80, -60, 20, 20, 1);
+
+    entityManager.ListAllEntities();
 }
 
 void Game::ProcessInput()

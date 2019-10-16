@@ -5,6 +5,7 @@
 
 TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s)
 {
+    componentName = "TransformComponent";
     position = glm::vec2(posX, posY);
     velocity = glm::vec2(velX, velY);
     width = w;
@@ -24,7 +25,5 @@ void TransformComponent::Update(float deltaTime)
 
 void TransformComponent::Render()
 {
-    SDL_Rect transformRect{(int)position.x, (int)position.y, width * scale, height * scale};
-    SDL_SetRenderDrawColor(Game::renderer, 0, 255, 0, 255);
-    SDL_RenderFillRect(Game::renderer, &transformRect);
+   
 }

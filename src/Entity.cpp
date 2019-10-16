@@ -2,6 +2,9 @@
 #include "EntityManager.h"
 #include "Component.h"
 
+
+#include <iostream>
+
 Entity::Entity(EntityManager& manager) :  entityManager(manager)
 {
     this->isActive = true;
@@ -33,3 +36,12 @@ void Entity::Destroy()
     this->isActive = false;
 }
 
+void Entity::DisplayInfo()
+{
+    std::cout << "\nEntity name: " << entityName << std::endl;
+    if(components.size() == 0) { return; }
+    for(auto &component : components)
+    {
+        std::cout << "\tComponent<" << component->componentName << ">" << std::endl;
+    }
+}
