@@ -39,6 +39,12 @@ class Entity
             return static_cast<T*>(componentTypeMap[&typeid(T)]);
         }
 
+        template<typename T>
+        bool HasComponent()
+        {
+            return this->GetComponent<T>();
+        }
+
     private:
         EntityManager& entityManager;
         bool isActive;

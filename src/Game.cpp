@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
+#include <time.h>
 
 
 EntityManager entityManager;
@@ -52,26 +53,38 @@ void Game::Initialise(int width, int height)
 
 void Game::LoadLevel(int levelNumber)
 {
-    //Add new assets to AssetManager
-    std::string textureFilePath = "assets/images/tank-big-right.png";
-    assetManager->AddTexture("tank-image", textureFilePath.c_str());
+    srand(time(NULL));
+
+    assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
+    assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
     //Add new entities and their components to EntityManager
 
+    auto& tankEntity = entityManager.AddEntity("tank_1");
+    tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 100 + 51, 0, 32, 32, 1);
+    tankEntity.AddComponent<SpriteComponent>("tank-image");
 
 
-    auto& newEntity = entityManager.AddEntity("Projectile");
-    newEntity.AddComponent<TransformComponent>(0, 0, 80, 60, 20, 20, 1);
+    auto& helicopterEntity = entityManager.AddEntity("helicopter_1");
+    helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
+    helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
+/*
+    auto& newEntity2 = entityManager.AddEntity("tank_2");
+    newEntity2.AddComponent<TransformComponent>(0, 200, rand() % 100 + 51, 0, 32, 32, 1);
+    //newEntity2.AddComponent<SpriteComponent>("tank-image");
+    std::cout << newEntity2.HasComponent<SpriteComponent>() << std::endl;
 
-    auto& newEntity2 = entityManager.AddEntity("Projectile_2");
-    newEntity2.AddComponent<TransformComponent>(200, 0, 0, 100, 10, 10, 1);
-
-    auto& newEntity3 = entityManager.AddEntity("tank");
-    newEntity3.AddComponent<TransformComponent>(0, 300, 100, 0, 15, 15, 1);
+    auto& newEntity3 = entityManager.AddEntity("tank_3");
+    newEntity3.AddComponent<TransformComponent>(0, 300, rand() % 100 + 51, 0, 32, 32, 1);
     newEntity3.AddComponent<SpriteComponent>("tank-image");
 
-     auto& newEntity4 = entityManager.AddEntity("Projectile_4");
-    newEntity4.AddComponent<TransformComponent>(0, 600, 80, -60, 20, 20, 1);
+    auto& newEntity4 = entityManager.AddEntity("tank_4");
+    newEntity4.AddComponent<TransformComponent>(0, 400, rand() % 100 + 51, 0, 32, 32, 1);
+    newEntity4.AddComponent<SpriteComponent>("tank-image");
 
+    auto& newEntity5 = entityManager.AddEntity("tank_5");
+    newEntity5.AddComponent<TransformComponent>(0, 500, rand() % 100 + 51, 0, 32, 32, 1);
+    newEntity5.AddComponent<SpriteComponent>("tank-image");
+*/
     entityManager.ListAllEntities();
 }
 

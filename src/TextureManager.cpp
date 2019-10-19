@@ -4,11 +4,8 @@
 
 SDL_Texture* TextureManager::LoadTexture(const char* fileName)
 {
-    std::cout << "File name: " << fileName << std::endl;
     SDL_Surface* surface = IMG_Load(fileName);
-    std::cout << "Surface valid: " << surface << std::endl;
     SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
-    std::cout << "Texture valid: " << texture << std::endl;
     SDL_FreeSurface(surface);
     return texture;
 }
