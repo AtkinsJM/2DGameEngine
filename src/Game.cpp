@@ -5,6 +5,7 @@
 #include "EntityManager.h"
 #include "Components/TransformComponent.h"
 #include "Components/SpriteComponent.h"
+#include "Components/KeyboardControlComponent.h"
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
@@ -14,6 +15,7 @@
 EntityManager entityManager;
 AssetManager* Game::assetManager = new AssetManager(&entityManager);
 SDL_Renderer* Game::renderer;
+SDL_Event Game::event;
 
 Game::Game()
 {
@@ -57,16 +59,23 @@ void Game::LoadLevel(int levelNumber)
 
     assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
+    assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
     //Add new entities and their components to EntityManager
 
-    auto& tankEntity = entityManager.AddEntity("tank_1");
+    Entity& tankEntity = entityManager.AddEntity("tank_1");
     tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 100 + 51, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
 
 
-    auto& helicopterEntity = entityManager.AddEntity("helicopter_1");
+    Entity& helicopterEntity = entityManager.AddEntity("helicopter_1");
     helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
     helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
+    helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
+
+    Entity& radarEntity = entityManager.AddEntity("radar");
+    radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+    radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
+
 /*
     auto& newEntity2 = entityManager.AddEntity("tank_2");
     newEntity2.AddComponent<TransformComponent>(0, 200, rand() % 100 + 51, 0, 32, 32, 1);
@@ -90,7 +99,6 @@ void Game::LoadLevel(int levelNumber)
 
 void Game::ProcessInput()
 {
-    SDL_Event event;
     SDL_PollEvent(&event);
     switch(event.type)
     {

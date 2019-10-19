@@ -21,6 +21,7 @@ class Game
         void LoadLevel(int levelNumber);
         static SDL_Renderer* renderer;
         static AssetManager* assetManager;
+        static SDL_Event event;
     private:
         bool isRunning;
         SDL_Window* window;

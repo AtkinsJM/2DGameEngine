@@ -22,6 +22,12 @@ class TransformComponent: public Component
         void Update(float deltaTime) override;
         void Render() override;
 
+        template<typename T>
+        const T& Clamp(T num, T min, T max)
+        {
+            return num <= min ? min : num >= max ? max : num;
+        }
+
     private:
 
 };

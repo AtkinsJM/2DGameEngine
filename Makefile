@@ -1,5 +1,5 @@
 build:
-	g++ -w -std=c++14 -Wfatal-errors -static-libgcc -static-libstdc++ \
+	g++ -w -std=c++17 -Wfatal-errors -static-libgcc -static-libstdc++ \
 	./src/*.cpp \
 	./src/Components/*.cpp \
 	-o game.exe \
