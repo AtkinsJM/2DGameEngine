@@ -10,12 +10,13 @@
 #include "AssetManager.h"
 #include <string>
 #include <time.h>
-
+#include "Map.h"
 
 EntityManager entityManager;
 AssetManager* Game::assetManager = new AssetManager(&entityManager);
 SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
+Map* map;
 
 Game::Game()
 {
@@ -60,6 +61,11 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
     assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
+    assetManager->AddTexture("jungle-tilemap", std::string("assets/tilemaps/jungle.png").c_str());
+    
+    map = new Map("jungle-tilemap", 1, 32);
+    map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
+    
     //Add new entities and their components to EntityManager
 
     Entity& tankEntity = entityManager.AddEntity("tank_1");
@@ -94,7 +100,7 @@ void Game::LoadLevel(int levelNumber)
     newEntity5.AddComponent<TransformComponent>(0, 500, rand() % 100 + 51, 0, 32, 32, 1);
     newEntity5.AddComponent<SpriteComponent>("tank-image");
 */
-    entityManager.ListAllEntities();
+    //entityManager.ListAllEntities();
 }
 
 void Game::ProcessInput()
