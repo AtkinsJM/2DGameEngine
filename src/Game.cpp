@@ -6,17 +6,21 @@
 #include "Components/TransformComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/KeyboardControlComponent.h"
+#include "Components/ColliderComponent.h"
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
 #include <time.h>
 #include "Map.h"
+#include <vector>
 
 EntityManager entityManager;
 AssetManager* Game::assetManager = new AssetManager(&entityManager);
 SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
+SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 Map* map;
+Entity* player;
 
 Game::Game()
 {
@@ -63,43 +67,28 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
     assetManager->AddTexture("jungle-tilemap", std::string("assets/tilemaps/jungle.png").c_str());
     
-    map = new Map("jungle-tilemap", 1, 32);
+    map = new Map("jungle-tilemap", 2, 32);
     map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
-    
+
     //Add new entities and their components to EntityManager
 
-    Entity& tankEntity = entityManager.AddEntity("tank_1");
+    Entity& tankEntity = entityManager.AddEntity("tank_1", LayerType::ENEMY_LAYER);
     tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 100 + 51, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
+    tankEntity.AddComponent<ColliderComponent>("Enemy", 0, 100, 32, 32);
 
-
-    Entity& helicopterEntity = entityManager.AddEntity("helicopter_1");
+    //Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
+    Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
     helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
     helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
     helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
+    helicopterEntity.AddComponent<ColliderComponent>("Player", 200, 200, 32, 32);
+    player = &helicopterEntity;
 
-    Entity& radarEntity = entityManager.AddEntity("radar");
+    Entity& radarEntity = entityManager.AddEntity("radar", LayerType::UI_LAYER);
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 
-/*
-    auto& newEntity2 = entityManager.AddEntity("tank_2");
-    newEntity2.AddComponent<TransformComponent>(0, 200, rand() % 100 + 51, 0, 32, 32, 1);
-    //newEntity2.AddComponent<SpriteComponent>("tank-image");
-    std::cout << newEntity2.HasComponent<SpriteComponent>() << std::endl;
-
-    auto& newEntity3 = entityManager.AddEntity("tank_3");
-    newEntity3.AddComponent<TransformComponent>(0, 300, rand() % 100 + 51, 0, 32, 32, 1);
-    newEntity3.AddComponent<SpriteComponent>("tank-image");
-
-    auto& newEntity4 = entityManager.AddEntity("tank_4");
-    newEntity4.AddComponent<TransformComponent>(0, 400, rand() % 100 + 51, 0, 32, 32, 1);
-    newEntity4.AddComponent<SpriteComponent>("tank-image");
-
-    auto& newEntity5 = entityManager.AddEntity("tank_5");
-    newEntity5.AddComponent<TransformComponent>(0, 500, rand() % 100 + 51, 0, 32, 32, 1);
-    newEntity5.AddComponent<SpriteComponent>("tank-image");
-*/
     //entityManager.ListAllEntities();
 }
 
@@ -134,6 +123,9 @@ void Game::Update()
     ticksLastFrame = SDL_GetTicks();
  
     entityManager.Update(deltaTime);
+
+    HandleCameraMovement();
+    CheckCollisions();
 }
 
 void Game::Render()
@@ -148,6 +140,28 @@ void Game::Render()
 
     // Swap front and back buffers
     SDL_RenderPresent(renderer);
+}
+
+void Game::HandleCameraMovement()
+{
+    if(!player) { return; }
+    TransformComponent* playerTransform = player->GetComponent<TransformComponent>();
+    camera.x = playerTransform->position.x - (WINDOW_WIDTH / 2);
+    camera.y = playerTransform->position.y - (WINDOW_HEIGHT / 2);
+    // TODO: sort for map scale
+    camera.x = camera.x < 0 ? 0 : camera.x;
+    camera.x = camera.x > camera.w ? camera.w : camera.x;
+    camera.y = camera.y < 0 ? 0 : camera.y;
+    camera.y = camera.y > camera.h ? camera.h : camera.y;
+}
+
+void Game::CheckCollisions()
+{
+    std::vector<std::string> colliderTags = entityManager.GetEntityCollisions(player);
+    for(auto tag : colliderTags)
+    {
+        std::cout << tag << std::endl;
+    }
 }
 
 void Game::Destroy()

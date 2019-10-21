@@ -26,7 +26,8 @@ TileComponent::~TileComponent()
 
 void TileComponent::Update(float deltaTime)
 {
-
+    destinationRect.x = position.x - Game::camera.x;
+    destinationRect.y = position.y - Game::camera.y;
 }
 
 void TileComponent::Render()

@@ -9,10 +9,11 @@
 
 KeyboardControlComponent::KeyboardControlComponent()
 {
-
+    componentName = "KeyboardControlComponent";
 }
 KeyboardControlComponent::KeyboardControlComponent(std::string upKey, std::string rightKey, std::string downKey, std::string leftKey, std::string shootKey)
 {
+    componentName = "KeyboardControlComponent";
     this->upKey = GetSDLKeyStringCode(upKey);
     this->rightKey = GetSDLKeyStringCode(rightKey);
     this->downKey = GetSDLKeyStringCode(downKey);

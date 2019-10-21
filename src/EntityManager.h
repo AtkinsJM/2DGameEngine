@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "Constants.h"
 
 class Entity;
 
@@ -13,11 +14,12 @@ class EntityManager
         void Update(float deltaTime);
         void Render();
         bool HasEntities() { return entities.size() > 0; };
-        Entity& AddEntity(std::string entityName);
+        Entity& AddEntity(std::string entityName, LayerType layer);
         std::vector<Entity*> GetEntities() const { return entities; };
+        std::vector<Entity*> GetEntitiesByLayer(LayerType layer) const;
         unsigned int GetEntityCount() { return entities.size(); };
         void ListAllEntities();
-
+        std::vector<std::string> GetEntityCollisions(Entity* myEntity) const;
     private:
         std::vector<Entity*> entities;
 };

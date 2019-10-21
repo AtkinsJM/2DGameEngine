@@ -87,6 +87,11 @@ void SpriteComponent::Update(float deltaTime)
     
     destinationRect.x = static_cast<int>(transform->position.x);
     destinationRect.y = static_cast<int>(transform->position.y);
+    if(!bIsFixed)
+    {
+        destinationRect.x -= Game::camera.x;
+        destinationRect.y -= Game::camera.y;
+    }
     destinationRect.w = transform->width * transform->scale;
     destinationRect.h = transform->height * transform->scale;
 }

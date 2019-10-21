@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Components/TileComponent.h"
+#include "Constants.h"
 
 #include <fstream>
 
@@ -38,6 +39,6 @@ void Map::LoadMap(std::string filePath, int sizeX, int sizeY)
 
 void Map::AddTile(int sourceRectX, int sourceRectY, int x, int y)
 {
-    Entity& newTile = entityManager.AddEntity("Tile");
+    Entity& newTile = entityManager.AddEntity("Tile", LayerType::TILEMAP_LAYER);
     newTile.AddComponent<TileComponent>(textureID, sourceRectX, sourceRectY, x, y, tileSize, scale);
 }

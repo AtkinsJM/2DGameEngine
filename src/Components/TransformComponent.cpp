@@ -5,6 +5,7 @@
 // TODO: remove
 #include "../Entity.h"
 #include "KeyboardControlComponent.h"
+#include "../Map.h"
 
 TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s)
 {
@@ -26,8 +27,9 @@ void TransformComponent::Update(float deltaTime)
     position += velocity * deltaTime;
     if(owner->HasComponent<KeyboardControlComponent>())
     {
-        position.x = Clamp(position.x, 0.0f, 800.0f - width);
-        position.y = Clamp(position.y, 0.0f, 600.0f - height);
+        // TODO: get map width and height for max clamp
+        //position.x = Clamp(position.x, 0.0f, Game::map - width);
+        //position.y = Clamp(position.y, 0.0f, 600.0f - height);
     }
     
 }
