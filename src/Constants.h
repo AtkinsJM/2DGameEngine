@@ -11,5 +11,17 @@ const unsigned int MIN_FPS = 20;
 const unsigned int MAX_FRAME_TIME = 1000 / MIN_FPS;
 const float MAX_DELTA_TIME = MAX_FRAME_TIME / 1000.0f;
 
+enum LayerType
+{
+    TILEMAP_LAYER = 0,
+    VEGETATION_LAYER = 1,
+    ENEMY_LAYER = 2,
+    PLAYER_LAYER = 3,
+    PROJECTILE_LAYER = 4,
+    UI_LAYER = 5
+};
+
+const unsigned int NUM_LAYERS = 6;
+
 #endif
 
