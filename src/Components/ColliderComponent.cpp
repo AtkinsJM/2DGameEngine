@@ -2,12 +2,15 @@
 #include "../Entity.h"
 #include "TransformComponent.h"
 #include "../Game.h"
+#include "../TextureManager.h"
+#include "../AssetManager.h"
 
-ColliderComponent::ColliderComponent(std::string colliderTag, int x, int y, int width, int height) 
+ColliderComponent::ColliderComponent(std::string textureID, std::string colliderTag, int x, int y, int width, int height) 
 {
     componentName = "ColliderComponent";
     this->colliderTag = colliderTag;
     this->collider = {x, y, width, height};
+    texture = Game::assetManager->GetTexture(textureID);
 }
 
 void ColliderComponent::Initialise() 
@@ -32,5 +35,8 @@ void ColliderComponent::Update(float deltaTime)
 
 void ColliderComponent::Render()
 {
-   
+    if(Game::bShowColliders)
+    {
+        TextureManager::DrawTexture(texture, sourceRect, destinationRect, SDL_FLIP_NONE);
+    }
 }

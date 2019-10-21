@@ -19,12 +19,13 @@ AssetManager* Game::assetManager = new AssetManager(&entityManager);
 SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
 SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+bool Game::bShowColliders = false;
 Map* map;
 Entity* player;
 
 Game::Game()
 {
-    this->isRunning = false;
+    this->bIsRunning = false;
 }
 
 Game::~Game()
@@ -54,7 +55,7 @@ void Game::Initialise(int width, int height)
 
     LoadLevel(0);
 
-    isRunning = true;
+    bIsRunning = true;
     return;
 }
 
@@ -66,6 +67,7 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
     assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
     assetManager->AddTexture("jungle-tilemap", std::string("assets/tilemaps/jungle.png").c_str());
+    assetManager->AddTexture("collision-image", std::string("assets/images/collision-texture.png").c_str());
     
     map = new Map("jungle-tilemap", 2, 32);
     map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
@@ -75,14 +77,14 @@ void Game::LoadLevel(int levelNumber)
     Entity& tankEntity = entityManager.AddEntity("tank_1", LayerType::ENEMY_LAYER);
     tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 100 + 51, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
-    tankEntity.AddComponent<ColliderComponent>("Enemy", 0, 100, 32, 32);
+    tankEntity.AddComponent<ColliderComponent>("collision-image", "Enemy", 0, 100, 32, 32);
 
     //Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
     Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
     helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
     helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
     helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
-    helicopterEntity.AddComponent<ColliderComponent>("Player", 200, 200, 32, 32);
+    helicopterEntity.AddComponent<ColliderComponent>("collision-image", "Player", 200, 200, 32, 32);
     player = &helicopterEntity;
 
     Entity& radarEntity = entityManager.AddEntity("radar", LayerType::UI_LAYER);
@@ -98,12 +100,17 @@ void Game::ProcessInput()
     switch(event.type)
     {
         case SDL_QUIT:
-            isRunning = false;
+            bIsRunning = false;
             break;
         case SDL_KEYDOWN:
             if(event.key.keysym.sym == SDLK_ESCAPE)
             {
-                isRunning = false;
+                bIsRunning = false;
+            }
+            else if (event.key.keysym.sym == SDLK_c)
+            {   
+                // Toggle collider bounding boxes
+                bShowColliders = !bShowColliders;
             }
             break;
         default:
@@ -157,6 +164,7 @@ void Game::HandleCameraMovement()
 
 void Game::CheckCollisions()
 {
+    // Get tags of all colliders in collision with entity
     std::vector<std::string> colliderTags = entityManager.GetEntityCollisions(player);
     for(auto tag : colliderTags)
     {

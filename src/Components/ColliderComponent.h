@@ -4,6 +4,7 @@
 #include "../Component.h"
 #include <string>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 class TransformComponent;
 
@@ -16,12 +17,12 @@ class ColliderComponent : public Component
         SDL_Rect destinationRect;
         TransformComponent* transform;
 
-        ColliderComponent(std::string colliderTag, int x, int y, int w, int h);
+        ColliderComponent(std::string textureID, std::string colliderTag, int x, int y, int w, int h);
         void Initialise() override;
         void Update(float deltaTime) override;
         void Render() override;
     private:
-
+        SDL_Texture* texture;
 };
 
 #endif

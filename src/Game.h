@@ -12,7 +12,7 @@ class Game
     public:
         Game();
         ~Game();
-        bool IsRunning() const { return isRunning; };
+        bool IsRunning() const { return bIsRunning; };
         void Initialise(int width, int height);
         void ProcessInput();
         void Update();
@@ -25,8 +25,9 @@ class Game
         static AssetManager* assetManager;
         static SDL_Event event;
         static SDL_Rect camera;
+        static bool bShowColliders;
     private:
-        bool isRunning;
+        bool bIsRunning;
         SDL_Window* window;
         int ticksLastFrame = 0;
 };
