@@ -26,6 +26,7 @@ class Game
         static SDL_Event event;
         static SDL_Rect camera;
         static bool bShowColliders;
+        static bool bShowObjectLabels;
     private:
         bool bIsRunning;
         SDL_Window* window;

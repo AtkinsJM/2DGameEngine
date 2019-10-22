@@ -7,6 +7,7 @@
 #include "Components/SpriteComponent.h"
 #include "Components/KeyboardControlComponent.h"
 #include "Components/ColliderComponent.h"
+#include "Components/LabelComponent.h"
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
@@ -20,6 +21,7 @@ SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
 SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 bool Game::bShowColliders = false;
+bool Game::bShowObjectLabels = false;
 Map* map;
 Entity* player;
 
@@ -38,6 +40,11 @@ void Game::Initialise(int width, int height)
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cerr << "Error initialising SDL" << std::endl;
+        return;
+    }
+    if(TTF_Init() != 0)
+    {
+        std::cerr << "Error initialising SDL TTF" << std::endl;
         return;
     }
     window = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
@@ -68,6 +75,10 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
     assetManager->AddTexture("jungle-tilemap", std::string("assets/tilemaps/jungle.png").c_str());
     assetManager->AddTexture("collision-image", std::string("assets/images/collision-texture.png").c_str());
+
+    assetManager->AddFont("charriot-font", std::string("assets/fonts/charriot.ttf").c_str(), 16);
+    assetManager->AddFont("charriot-font-small", std::string("assets/fonts/charriot.ttf").c_str(), 12);
+    assetManager->AddFont("arial-font", std::string("assets/fonts/arial.ttf").c_str(), 14);
     
     map = new Map("jungle-tilemap", 2, 32);
     map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
@@ -75,9 +86,11 @@ void Game::LoadLevel(int levelNumber)
     //Add new entities and their components to EntityManager
 
     Entity& tankEntity = entityManager.AddEntity("tank_1", LayerType::ENEMY_LAYER);
-    tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 100 + 51, 0, 32, 32, 1);
+    tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 50 + 51, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
     tankEntity.AddComponent<ColliderComponent>("collision-image", "Enemy", 0, 100, 32, 32);
+    tankEntity.AddComponent<LabelComponent>(0, 40, "Enemy", "charriot-font-small", RED_COLOR);
+    
 
     //Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
     Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
@@ -85,12 +98,15 @@ void Game::LoadLevel(int levelNumber)
     helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
     helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
     helicopterEntity.AddComponent<ColliderComponent>("collision-image", "Player", 200, 200, 32, 32);
+    helicopterEntity.AddComponent<LabelComponent>(0, 40, "Player", "charriot-font-small", GREEN_COLOR);
     player = &helicopterEntity;
 
     Entity& radarEntity = entityManager.AddEntity("radar", LayerType::UI_LAYER);
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 
+    Entity& labelLevelName = entityManager.AddEntity("LabelLevelName", LayerType::UI_LAYER);
+    labelLevelName.AddComponent<LabelComponent>(10, 10, "Level 1", "charriot-font", WHITE_COLOR);
     //entityManager.ListAllEntities();
 }
 
@@ -112,7 +128,16 @@ void Game::ProcessInput()
                 // Toggle collider bounding boxes
                 bShowColliders = !bShowColliders;
             }
+            else if (event.key.keysym.sym == SDLK_TAB)
+            {
+                bShowObjectLabels = true;
+            }
             break;
+        case SDL_KEYUP:
+            if (event.key.keysym.sym == SDLK_TAB)
+            {
+                bShowObjectLabels = false;
+            }
         default:
             break;
     }
