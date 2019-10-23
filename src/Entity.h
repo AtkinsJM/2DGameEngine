@@ -13,7 +13,6 @@ class Component;
 class Entity
 {
     public:
-        std::string entityName;
         LayerType layer;
         Entity(EntityManager& manager);
         Entity(EntityManager& manager, std::string name, LayerType layer);
@@ -23,6 +22,7 @@ class Entity
         bool IsActive() const { return isActive; };
 
         void DisplayInfo();
+        std::string EntityName() { return entityName; };
 
         template<typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args)
@@ -48,6 +48,7 @@ class Entity
         }
 
     private:
+        std::string entityName;
         EntityManager& entityManager;
         bool isActive;
         std::vector<Component*> components;

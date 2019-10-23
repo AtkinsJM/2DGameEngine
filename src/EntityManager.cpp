@@ -13,10 +13,21 @@ void EntityManager::ClearData()
 
 void EntityManager::Update(float deltaTime)
 {
+    for(int i = 0; i < entities.size(); i++)
+    {
+        // Call update method on entity
+        entities[i]->Update(deltaTime);
+        // If entity is inactive (destroyed), remove it
+        if(entities[i]->IsActive() == false)
+        {
+            entities.erase(entities.begin() + i);
+        }
+    }
+    /*
     for(auto &entity : entities)
     {
         entity->Update(deltaTime);
-    }
+    }*/
 }
 
 void EntityManager::Render()

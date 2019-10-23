@@ -8,6 +8,7 @@
 #include "Components/KeyboardControlComponent.h"
 #include "Components/ColliderComponent.h"
 #include "Components/LabelComponent.h"
+#include "Components/ProjectileEmitterComponent.h"
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
@@ -75,6 +76,7 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
     assetManager->AddTexture("jungle-tilemap", std::string("assets/tilemaps/jungle.png").c_str());
     assetManager->AddTexture("collision-image", std::string("assets/images/collision-texture.png").c_str());
+    assetManager->AddTexture("projectile-image", std::string("assets/images/bullet-enemy.png").c_str());
 
     assetManager->AddFont("charriot-font", std::string("assets/fonts/charriot.ttf").c_str(), 16);
     assetManager->AddFont("charriot-font-small", std::string("assets/fonts/charriot.ttf").c_str(), 12);
@@ -85,15 +87,15 @@ void Game::LoadLevel(int levelNumber)
 
     //Add new entities and their components to EntityManager
 
-    Entity& tankEntity = entityManager.AddEntity("tank_1", LayerType::ENEMY_LAYER);
-    tankEntity.AddComponent<TransformComponent>(0, 100, rand() % 50 + 51, 0, 32, 32, 1);
+    Entity& tankEntity = entityManager.AddEntity("tank_1", ENEMY_LAYER);
+    tankEntity.AddComponent<TransformComponent>(0, 100, 50, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
     tankEntity.AddComponent<ColliderComponent>("collision-image", "Enemy", 0, 100, 32, 32);
     tankEntity.AddComponent<LabelComponent>(0, 40, "Enemy", "charriot-font-small", RED_COLOR);
+    tankEntity.AddComponent<ProjectileEmitterComponent>(125, 375, 0, 2.0f, true);
     
 
-    //Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
-    Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", LayerType::PLAYER_LAYER);
+    Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", PLAYER_LAYER);
     helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
     helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
     helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
@@ -101,11 +103,11 @@ void Game::LoadLevel(int levelNumber)
     helicopterEntity.AddComponent<LabelComponent>(0, 40, "Player", "charriot-font-small", GREEN_COLOR);
     player = &helicopterEntity;
 
-    Entity& radarEntity = entityManager.AddEntity("radar", LayerType::UI_LAYER);
+    Entity& radarEntity = entityManager.AddEntity("radar", UI_LAYER);
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 
-    Entity& labelLevelName = entityManager.AddEntity("LabelLevelName", LayerType::UI_LAYER);
+    Entity& labelLevelName = entityManager.AddEntity("LabelLevelName", UI_LAYER);
     labelLevelName.AddComponent<LabelComponent>(10, 10, "Level 1", "charriot-font", WHITE_COLOR);
     //entityManager.ListAllEntities();
 }
@@ -191,9 +193,16 @@ void Game::CheckCollisions()
 {
     // Get tags of all colliders in collision with entity
     std::vector<std::string> colliderTags = entityManager.GetEntityCollisions(player);
-    for(auto tag : colliderTags)
+    for(auto tag : colliderNames)
     {
-        std::cout << tag << std::endl;
+        if(tag == "Enemy")
+        {
+            std::cout << "Collided with enemy - game over!" << std::endl;
+        }
+        else if (tag == "Projectile")
+        {
+            std::cout << "Collided with enemy projectile - health lost!" << std::endl;
+        } 
     }
 }
 
