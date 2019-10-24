@@ -90,7 +90,7 @@ void Game::LoadLevel(int levelNumber)
     Entity& tankEntity = entityManager.AddEntity("tank_1", ENEMY_LAYER);
     tankEntity.AddComponent<TransformComponent>(0, 100, 50, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
-    tankEntity.AddComponent<ColliderComponent>("collision-image", "Enemy", 0, 100, 32, 32);
+    tankEntity.AddComponent<ColliderComponent>("collision-image", "Enemy", ColliderType::ENEMY, 0, 100, 32, 32);
     tankEntity.AddComponent<LabelComponent>(0, 40, "Enemy", "charriot-font-small", RED_COLOR);
     tankEntity.AddComponent<ProjectileEmitterComponent>(125, 375, 0, 2.0f, true);
     
@@ -99,7 +99,7 @@ void Game::LoadLevel(int levelNumber)
     helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
     helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
     helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
-    helicopterEntity.AddComponent<ColliderComponent>("collision-image", "Player", 200, 200, 32, 32);
+    helicopterEntity.AddComponent<ColliderComponent>("collision-image", "Player", ColliderType::PLAYER, 200, 200, 32, 32);
     helicopterEntity.AddComponent<LabelComponent>(0, 40, "Player", "charriot-font-small", GREEN_COLOR);
     player = &helicopterEntity;
 
@@ -159,7 +159,6 @@ void Game::Update()
     entityManager.Update(deltaTime);
 
     HandleCameraMovement();
-    CheckCollisions();
 }
 
 void Game::Render()
@@ -187,23 +186,6 @@ void Game::HandleCameraMovement()
     camera.x = camera.x > camera.w ? camera.w : camera.x;
     camera.y = camera.y < 0 ? 0 : camera.y;
     camera.y = camera.y > camera.h ? camera.h : camera.y;
-}
-
-void Game::CheckCollisions()
-{
-    // Get tags of all colliders in collision with entity
-    std::vector<std::string> colliderTags = entityManager.GetEntityCollisions(player);
-    for(auto tag : colliderNames)
-    {
-        if(tag == "Enemy")
-        {
-            std::cout << "Collided with enemy - game over!" << std::endl;
-        }
-        else if (tag == "Projectile")
-        {
-            std::cout << "Collided with enemy projectile - health lost!" << std::endl;
-        } 
-    }
 }
 
 void Game::Destroy()

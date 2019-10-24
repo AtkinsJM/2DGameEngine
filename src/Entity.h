@@ -9,6 +9,7 @@
 
 class EntityManager;
 class Component;
+class ColliderComponent;
 
 class Entity
 {
@@ -19,10 +20,15 @@ class Entity
         void Update(float deltaTime);
         void Render();
         void Destroy();
-        bool IsActive() const { return isActive; };
+        bool IsActive() const { return bIsActive; };
 
         void DisplayInfo();
+        void CheckCollisions();
         std::string EntityName() { return entityName; };
+
+        virtual void OnBeginCollision(Entity* otherEntity);
+        virtual void OnContinueCollision(Entity* otherEntity);
+        virtual void OnEndCollision(Entity* otherEntity);
 
         template<typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args)
@@ -50,9 +56,11 @@ class Entity
     private:
         std::string entityName;
         EntityManager& entityManager;
-        bool isActive;
+        bool bIsActive;
         std::vector<Component*> components;
         std::map<const std::type_info*, Component*> componentTypeMap;
+        // TODO: rename vector
+        std::vector<Entity*> currentCollisions;
 };
 
 #endif

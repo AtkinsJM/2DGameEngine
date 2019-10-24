@@ -1,7 +1,6 @@
 #include "ProjectileComponent.h"
 #include "../Entity.h"
 #include "TransformComponent.h"
-#include <iostream>
 
 ProjectileComponent::ProjectileComponent(int speed, int range, float angleRad)
 {
@@ -17,7 +16,6 @@ void ProjectileComponent::Initialise()
     if(!transform) { return; }
     origin = glm::vec2(transform->position.x, transform->position.y);
     transform->velocity = glm::vec2(glm::cos(angleRad) * speed, glm::sin(angleRad) * speed);
-    std::cout << transform->velocity.x << ", " << transform->velocity.y << std::endl;
 }
 
 void ProjectileComponent::Update(float deltaTime)

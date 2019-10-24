@@ -23,6 +23,14 @@ enum LayerType
     UI_LAYER = 5
 };
 
+enum ColliderType
+{
+    PLAYER = 0,
+    ENEMY = 1,
+    PROJECTILE_PLAYER = 2,
+    PROJECTILE_ENEMY = 3
+};
+
 const unsigned int NUM_LAYERS = 6;
 
 const SDL_Color WHITE_COLOR = {255, 255, 255, 255};

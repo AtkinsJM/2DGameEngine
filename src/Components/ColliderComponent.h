@@ -5,19 +5,23 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "../Constants.h"
 
 class TransformComponent;
 
 class ColliderComponent : public Component
 {
     public:
+        //TODO: consider if I still need tags, or whether I can use collider types insted. Merge?
         std::string colliderTag;
         SDL_Rect collider;
         SDL_Rect sourceRect;
         SDL_Rect destinationRect;
         TransformComponent* transform;
+        
+        ColliderType colliderType;
 
-        ColliderComponent(std::string textureID, std::string colliderTag, int x, int y, int w, int h);
+        ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType, int x, int y, int w, int h);
         void Initialise() override;
         void Update(float deltaTime) override;
         void Render() override;

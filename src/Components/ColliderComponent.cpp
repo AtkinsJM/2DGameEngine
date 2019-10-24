@@ -5,10 +5,11 @@
 #include "../TextureManager.h"
 #include "../AssetManager.h"
 
-ColliderComponent::ColliderComponent(std::string textureID, std::string colliderTag, int x, int y, int width, int height) 
+ColliderComponent::ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType, int x, int y, int width, int height) //: colliderType(colliderType)
 {
     componentName = "ColliderComponent";
     this->colliderTag = colliderTag;
+    this->colliderType = colliderType;
     this->collider = {x, y, width, height};
     texture = Game::assetManager->GetTexture(textureID);
 }

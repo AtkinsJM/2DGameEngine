@@ -17,6 +17,8 @@ void EntityManager::Update(float deltaTime)
     {
         // Call update method on entity
         entities[i]->Update(deltaTime);
+        // TODO: consider passing all collisions into this method straight away
+        entities[i]->CheckCollisions();
         // If entity is inactive (destroyed), remove it
         if(entities[i]->IsActive() == false)
         {
@@ -71,22 +73,22 @@ std::vector<Entity*> EntityManager::GetEntitiesByLayer(LayerType layer) const
     return entitiesInLayer;
 }
 
-std::vector<std::string> EntityManager::GetEntityCollisions(Entity* myEntity) const
+std::vector<Entity*> EntityManager::GetEntityCollisions(Entity* myEntity) const
 {
-    std::vector<std::string> colliderTags;
+    std::vector<Entity*> collisionEntities;
     ColliderComponent* myCollider = myEntity->GetComponent<ColliderComponent>();
-    if(!myCollider) { return colliderTags; }
+    if(!myCollider) { return collisionEntities; }
     for(auto &entity : entities)
     {
         //TODO: check equivalence relation
         if(entity != myEntity && entity->HasComponent<ColliderComponent>())
         {
             ColliderComponent* otherCollider = entity->GetComponent<ColliderComponent>();
-            if(Collision::CheckRectangleCollision(myCollider->collider, otherCollider->collider))
+            if(Collision::CheckRectangleCollision(myCollider->collider, otherCollider->collider) && Collision::CheckCollisionTypes(myCollider->colliderType, otherCollider->colliderType))
             {
-                colliderTags.emplace_back(otherCollider->colliderTag);
+                collisionEntities.emplace_back(otherCollider->owner);
             }
         }
     }
-    return colliderTags;
+    return collisionEntities;
 }
