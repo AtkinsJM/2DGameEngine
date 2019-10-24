@@ -61,7 +61,7 @@ void Game::Initialise(int width, int height)
         return;
     }
 
-    LoadLevel(0);
+    LoadLevel(1);
 
     bIsRunning = true;
     return;
@@ -69,8 +69,42 @@ void Game::Initialise(int width, int height)
 
 void Game::LoadLevel(int levelNumber)
 {
-    srand(time(NULL));
+    sol::state lua;
+    lua.open_libraries(sol::lib::base, sol::lib::os, sol::lib::math);
+    
+    std::string levelName = "Level" + std::to_string(levelNumber);
+    lua.script_file("assets/scripts/" + levelName + ".lua");
 
+    // Load assets from Lua file
+    sol::table levelData = lua[levelName];
+    sol::table levelAssets = levelData["assets"];
+
+    unsigned int assetIndex = 0;
+    while(true)
+    {
+        sol::optional<sol::table> existsAssetIndexNode = levelAssets[assetIndex];
+        if(existsAssetIndexNode == sol::nullopt)
+        {
+            break;
+        }
+        sol::table asset = levelAssets[assetIndex];
+        std::string assetType = asset["type"];
+        std::string assetID = asset["id"];
+        std::string assetFile = asset["file"];
+        if(assetType == "texture")
+        {
+            assetManager->AddTexture(assetID, assetFile.c_str());
+        }
+        else if (assetType == "font")
+        {
+            int assetFontSize = asset["fontSize"];
+            assetManager->AddFont(assetID, assetFile.c_str(), assetFontSize);
+        }
+        assetIndex++;
+    }
+
+
+/* 
     assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
     assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
@@ -81,35 +115,36 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddFont("charriot-font", std::string("assets/fonts/charriot.ttf").c_str(), 16);
     assetManager->AddFont("charriot-font-small", std::string("assets/fonts/charriot.ttf").c_str(), 12);
     assetManager->AddFont("arial-font", std::string("assets/fonts/arial.ttf").c_str(), 14);
-    
-    map = new Map("jungle-tilemap", 2, 32);
+*/ 
+    map = new Map("terrain-texture-day", 2, 32);
     map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
 
     //Add new entities and their components to EntityManager
 
     Entity& tankEntity = entityManager.AddEntity("tank_1", ENEMY_LAYER);
     tankEntity.AddComponent<TransformComponent>(0, 100, 50, 0, 32, 32, 1);
-    tankEntity.AddComponent<SpriteComponent>("tank-image");
-    tankEntity.AddComponent<ColliderComponent>("collision-image", "Enemy", ColliderType::ENEMY, 0, 100, 32, 32);
+    tankEntity.AddComponent<SpriteComponent>("tank-texture-big-right");
+    tankEntity.AddComponent<ColliderComponent>("collision-texture", "Enemy", ColliderType::ENEMY, 0, 100, 32, 32);
     tankEntity.AddComponent<LabelComponent>(0, 40, "Enemy", "charriot-font-small", RED_COLOR);
     tankEntity.AddComponent<ProjectileEmitterComponent>(125, 375, 0, 2.0f, true);
     
 
     Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", PLAYER_LAYER);
     helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
-    helicopterEntity.AddComponent<SpriteComponent>("helicopter-image", 2, 90, true, false);
+    helicopterEntity.AddComponent<SpriteComponent>("helicopter-texture", 2, 90, true, false);
     helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
-    helicopterEntity.AddComponent<ColliderComponent>("collision-image", "Player", ColliderType::PLAYER, 200, 200, 32, 32);
+    helicopterEntity.AddComponent<ColliderComponent>("collision-texture", "Player", ColliderType::PLAYER, 200, 200, 32, 32);
     helicopterEntity.AddComponent<LabelComponent>(0, 40, "Player", "charriot-font-small", GREEN_COLOR);
     player = &helicopterEntity;
 
     Entity& radarEntity = entityManager.AddEntity("radar", UI_LAYER);
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-    radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
+    radarEntity.AddComponent<SpriteComponent>("radar-texture", 8, 150, false, true);
 
     Entity& labelLevelName = entityManager.AddEntity("LabelLevelName", UI_LAYER);
     labelLevelName.AddComponent<LabelComponent>(10, 10, "Level 1", "charriot-font", WHITE_COLOR);
     //entityManager.ListAllEntities();
+
 }
 
 void Game::ProcessInput()

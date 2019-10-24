@@ -5,8 +5,8 @@ build:
 	-o game.exe \
 	-I"C:\libsdl\SDL2\include" \
 	-I"C:\libsdl\SDL2\lib" \
-	-I"./lib/lua" \
-	-L"./lib/lua" \
+	-I".\lib\lua" \
+	-L".\lib\lua" \
 	-llua53 \
 	-lmingw32 \
 	-lSDL2main \
