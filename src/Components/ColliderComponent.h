@@ -18,10 +18,11 @@ class ColliderComponent : public Component
         SDL_Rect sourceRect;
         SDL_Rect destinationRect;
         TransformComponent* transform;
+        std::string textureID;
         
         ColliderType colliderType;
 
-        ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType);
+        ColliderComponent(std::string colliderTag, ColliderType colliderType);
         void Initialise() override;
         void Update(float deltaTime) override;
         void Render() override;

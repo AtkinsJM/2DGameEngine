@@ -10,9 +10,10 @@
 
 extern EntityManager entityManager;
 
-ProjectileEmitterComponent::ProjectileEmitterComponent(int speed, int range, int angleDeg, float spawnDelay, bool bIsLooping)
+ProjectileEmitterComponent::ProjectileEmitterComponent(Entity* projectilePrefab, int speed, int range, int angleDeg, float spawnDelay, bool bIsLooping)
 {
     componentName = "ProjectileEmitterComponent";
+    this->projectilePrefab = projectilePrefab;
     this->speed = speed;
     this->range = range;
     this->bIsLooping = bIsLooping;
@@ -45,9 +46,13 @@ void ProjectileEmitterComponent::Render()
 
 Entity& ProjectileEmitterComponent::SpawnProjectile()
 {
-    Entity& projectile = entityManager.AddEntity("projectile", PROJECTILE_LAYER);
-    projectile.AddComponent<TransformComponent>(transform->position.x + 16, transform->position.y + 16, 0, 0, 4, 4, 1);
+    Entity& projectile = entityManager.Instantiate(projectilePrefab, transform->position.x + transform->width/2, transform->position.y + transform->height/2);
+
+    /*
+    Entity& projectile = entityManager.AddEntity(projectilePrefab->EntityName(), projectilePrefab->layer);
+    projectile.AddComponent<TransformComponent>(transform->position.x + transform->width/2, transform->position.y + transform->height/2, 0, 0, projectilePrefab->GetComponent<TransformComponent>()->width, projectilePrefab->GetComponent<TransformComponent>()->height, 1);
     projectile.AddComponent<SpriteComponent>("projectile-texture");
     projectile.AddComponent<ColliderComponent>("collision-texture", "Projectile", ColliderType::PROJECTILE_ENEMY);
     projectile.AddComponent<ProjectileComponent>(speed, range, angleRad);
+    */
 }

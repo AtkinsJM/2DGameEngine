@@ -9,6 +9,9 @@ class TransformComponent;
 class ProjectileComponent: public Component
 {
     public:
+        int speed;
+        int range;
+        float angleRad;
         ProjectileComponent(int speed, int range, float angleRad);
         void Initialise() override;
         void Update(float deltaTime) override;
@@ -16,9 +19,7 @@ class ProjectileComponent: public Component
     private:
         TransformComponent* transform;
         glm::vec2 origin;
-        int speed;
-        int range;
-        float angleRad;
+        
 };
 
 #endif

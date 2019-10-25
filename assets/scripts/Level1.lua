@@ -85,7 +85,6 @@ Level1 = {
                     fixed = false
                 },
                 collider = {
-                    textureAssetId = "collision-texture",
                     tag = "PLAYER",
                     collisionType = 0
                 },
@@ -132,7 +131,6 @@ Level1 = {
                     animated = false
                 },
                 collider = {
-                    textureAssetId = "collision-texture",
                     tag = "ENEMY",
                     collisionType = 1
                 },
@@ -150,7 +148,17 @@ Level1 = {
                     range = 375,
                     angle = 0,
                     spawnDelay = 2.0,
-                    isLooping = true;
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }
+                    
                 }
             }
         },

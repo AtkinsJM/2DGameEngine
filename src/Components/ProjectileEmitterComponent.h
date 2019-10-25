@@ -9,7 +9,7 @@ class TransformComponent;
 class ProjectileEmitterComponent: public Component
 {
     public:
-        ProjectileEmitterComponent(int speed, int range, int angleDeg, float spawnDelay, bool bIsLooping);
+        ProjectileEmitterComponent(Entity* projectilePrefab, int speed, int range, int angleDeg, float spawnDelay, bool bIsLooping);
         void Initialise() override;
         void Update(float deltaTime) override;
         void Render() override;
@@ -23,6 +23,7 @@ class ProjectileEmitterComponent: public Component
         bool bIsLooping;
         float lastSpawnTime;
         float spawnDelay;
+        Entity* projectilePrefab;
 };
 
 #endif

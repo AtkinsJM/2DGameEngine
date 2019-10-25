@@ -9,6 +9,7 @@
 #include "Components/ColliderComponent.h"
 #include "Components/LabelComponent.h"
 #include "Components/ProjectileEmitterComponent.h"
+#include "Components/ProjectileComponent.h"
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
@@ -184,11 +185,10 @@ void Game::LoadLevel(int levelNumber)
         if(existsColliderComponent != sol::nullopt)
         {
             sol::table collider = entityComponents["collider"];
-            std::string textureAssetId = collider["textureAssetId"];
             std::string tag = collider["tag"];
             int colliderType = collider["collisionType"];
             
-            newEntity.AddComponent<ColliderComponent>(textureAssetId, tag, static_cast<ColliderType>(colliderType));
+            newEntity.AddComponent<ColliderComponent>(tag, static_cast<ColliderType>(colliderType));
         }
             
         sol::optional<sol::table> existsInputComponent = entityComponents["input"];
@@ -225,14 +225,28 @@ void Game::LoadLevel(int levelNumber)
         sol::optional<sol::table> existsProjectileEmitterComponent = entityComponents["projectileEmitter"];
         if(existsProjectileEmitterComponent != sol::nullopt)
         {
-            // TODO add data for projectile entity, then pass to emitter constructor
             sol::table projectileEmitter = entityComponents["projectileEmitter"];
             int speed = projectileEmitter["speed"];
             int range = projectileEmitter["range"];
             int angle = projectileEmitter["angle"];
             float spawnDelay = projectileEmitter["spawnDelay"];
             bool bIsLooping = projectileEmitter["isLooping"];
-            newEntity.AddComponent<ProjectileEmitterComponent>(speed, range, angle, spawnDelay, bIsLooping);
+
+            std::string projectileName = projectileEmitter["projectile"]["name"];
+            LayerType projectileLayerType = static_cast<LayerType>(projectileEmitter["projectile"]["layer"]);
+            std::string textureAssetId = projectileEmitter["projectile"]["textureAssetId"];
+            int projectileSize = projectileEmitter["projectile"]["size"];
+            int projectileScale = projectileEmitter["projectile"]["scale"];
+            std::string projectileColliderTag = projectileEmitter["projectile"]["colliderTag"];
+            ColliderType projectileColliderType = static_cast<ColliderType>(projectileEmitter["projectile"]["colliderType"]);
+
+            Entity* projectilePrefab = new Entity(entityManager, projectileName, projectileLayerType);
+            projectilePrefab->AddComponent<TransformComponent>(0, 0, 0, 0, projectileSize, projectileSize, projectileScale);
+            projectilePrefab->AddComponent<SpriteComponent>(textureAssetId);
+            projectilePrefab->AddComponent<ColliderComponent>(projectileColliderTag, projectileColliderType);
+            projectilePrefab->AddComponent<ProjectileComponent>(speed, range, angle);
+
+            newEntity.AddComponent<ProjectileEmitterComponent>(projectilePrefab, speed, range, angle, spawnDelay, bIsLooping);
         }        
         entityIndex++;
     }

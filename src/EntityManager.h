@@ -21,6 +21,7 @@ class EntityManager
         unsigned int GetEntityCount() { return entities.size(); };
         void ListAllEntities();
         std::vector<Entity*> GetEntityCollisions(Entity* myEntity) const;
+        Entity& Instantiate(Entity* prefab, int posX, int posY);
     private:
         std::vector<Entity*> entities;
 };

@@ -13,7 +13,8 @@
 SpriteComponent::SpriteComponent(std::string id)
 {
     componentName = "SpriteComponent";
-    SetTexture(id);
+    this->textureID = id;
+    SetTexture(textureID);
     this->bIsAnimated = false;
     this->bIsFixed = false;
 }
@@ -21,10 +22,12 @@ SpriteComponent::SpriteComponent(std::string id)
 SpriteComponent::SpriteComponent(std::string id, int numFrames, int animSpeed, bool bIsDirectional, bool bIsFixed)
 {
     componentName = "SpriteComponent";
+    this->textureID = id;
     this->bIsAnimated = true;
     this->numFrames = numFrames;
     this->animSpeed = animSpeed;
     this->bIsFixed = bIsFixed;
+    this->bIsDirectional = bIsDirectional;
 
     if(bIsDirectional)
     {
@@ -50,7 +53,7 @@ SpriteComponent::SpriteComponent(std::string id, int numFrames, int animSpeed, b
     }
     PlayAnim(this->currentAnimName);
 
-    SetTexture(id);
+    SetTexture(textureID);
 }
 
  void SpriteComponent::PlayAnim(std::string animName)
