@@ -118,7 +118,124 @@ void Game::LoadLevel(int levelNumber)
     map = new Map(mapTextureID, mapScale, tileSize);
     map->LoadMap(mapFile.c_str(), mapSizeX, mapSizeY);
 
+    /*****************************************************/
+    /* LOAD ENTITIES AND COMPONENTS FROM LUA CONFIG FILE */
+    /*****************************************************/
+    sol::table levelEntities = levelData["entities"];
 
+    unsigned int entityIndex = 0;
+    while(true)
+    {
+        sol::optional<sol::table> existsEntityIndexNode = levelEntities[entityIndex];
+        if(existsEntityIndexNode == sol::nullopt) { break; }
+
+        sol::table entity = levelEntities[entityIndex];
+        std::string entityName = entity["name"];
+        
+        LayerType entityLayerType = static_cast<LayerType>(entity["layer"]);
+
+        Entity& newEntity = entityManager.AddEntity(entityName, entityLayerType);
+        
+        // TODO find a better way of assigning player entity
+        if(entityName == "player")
+        {
+            player = &newEntity;
+        }        
+        
+        sol::table entityComponents = entity["components"];
+        
+        sol::optional<sol::table> existsTransformComponent = entityComponents["transform"];
+        if(existsTransformComponent != sol::nullopt)
+        {
+            sol::table transform = entityComponents["transform"];
+            int posX = transform["position"]["x"];
+            int posY = transform["position"]["y"];
+            int velX = transform["velocity"]["x"];
+            int velY = transform["velocity"]["y"];
+            int width = transform["width"];
+            int height = transform["height"];
+            int scale = transform["scale"];
+            int rotation = transform["rotation"];
+            // TODO add rotation to constructor
+            newEntity.AddComponent<TransformComponent>(posX, posY, velX, velY, width, height, scale);
+        }
+        
+        sol::optional<sol::table> existsSpriteComponent = entityComponents["sprite"];
+        if(existsSpriteComponent != sol::nullopt)
+        {
+            sol::table sprite = entityComponents["sprite"];
+            std::string textureAssetId = sprite["textureAssetId"];
+            bool bAnimated = sprite["animated"];
+            if(bAnimated)
+            {
+                int frameCount = sprite["frameCount"];
+                int animSpeed = sprite["animationSpeed"];
+                bool bIsDirectional = sprite["directional"];
+                bool bIsFixed = sprite["fixed"];
+                newEntity.AddComponent<SpriteComponent>(textureAssetId, frameCount, animSpeed, bIsDirectional, bIsFixed);
+            }
+            else
+            {
+                newEntity.AddComponent<SpriteComponent>(textureAssetId);
+            }
+        }
+        
+        sol::optional<sol::table> existsColliderComponent = entityComponents["collider"];
+        if(existsColliderComponent != sol::nullopt)
+        {
+            sol::table collider = entityComponents["collider"];
+            std::string textureAssetId = collider["textureAssetId"];
+            std::string tag = collider["tag"];
+            int colliderType = collider["collisionType"];
+            
+            newEntity.AddComponent<ColliderComponent>(textureAssetId, tag, static_cast<ColliderType>(colliderType));
+        }
+            
+        sol::optional<sol::table> existsInputComponent = entityComponents["input"];
+        if(existsInputComponent != sol::nullopt)
+        {
+            sol::table input = entityComponents["input"];
+           
+            sol::optional<sol::table> existsKeyboardComponent = input["keyboard"];
+            if(existsKeyboardComponent != sol::nullopt)
+            if(input["keyboard"])
+            {
+                sol::table keyboard = input["keyboard"];
+                std::string up = keyboard["up"];
+                std::string left = keyboard["left"];
+                std::string right = keyboard["right"];
+                std::string down = keyboard["down"];
+                std::string shoot = keyboard["shoot"];
+                newEntity.AddComponent<KeyboardControlComponent>(up, right, down, left, shoot);
+            }
+        }
+        
+        sol::optional<sol::table> existsLabelComponent = entityComponents["label"];
+        if(existsLabelComponent != sol::nullopt)
+        {
+            sol::table label = entityComponents["label"];
+            int posX = label["position"]["x"];
+            int posY = label["position"]["y"];
+            std::string text = label["text"];
+            std::string fontId = label["fontId"];
+            SDL_Color color = GREEN_COLOR;//label["color"];
+            newEntity.AddComponent<LabelComponent>(posX, posY, text, fontId, color);
+        }
+
+        sol::optional<sol::table> existsProjectileEmitterComponent = entityComponents["projectileEmitter"];
+        if(existsProjectileEmitterComponent != sol::nullopt)
+        {
+            // TODO add data for projectile entity, then pass to emitter constructor
+            sol::table projectileEmitter = entityComponents["projectileEmitter"];
+            int speed = projectileEmitter["speed"];
+            int range = projectileEmitter["range"];
+            int angle = projectileEmitter["angle"];
+            float spawnDelay = projectileEmitter["spawnDelay"];
+            bool bIsLooping = projectileEmitter["isLooping"];
+            newEntity.AddComponent<ProjectileEmitterComponent>(speed, range, angle, spawnDelay, bIsLooping);
+        }        
+        entityIndex++;
+    }
 /* 
     assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
@@ -133,7 +250,7 @@ void Game::LoadLevel(int levelNumber)
  
     map = new Map("terrain-texture-day", 2, 32);
     map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
-*/
+
     //Add new entities and their components to EntityManager
 
     Entity& tankEntity = entityManager.AddEntity("tank_1", ENEMY_LAYER);
@@ -159,7 +276,7 @@ void Game::LoadLevel(int levelNumber)
     Entity& labelLevelName = entityManager.AddEntity("LabelLevelName", UI_LAYER);
     labelLevelName.AddComponent<LabelComponent>(10, 10, "Level 1", "charriot-font", WHITE_COLOR);
     //entityManager.ListAllEntities();
-
+*/
 }
 
 void Game::ProcessInput()

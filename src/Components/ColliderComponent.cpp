@@ -5,12 +5,12 @@
 #include "../TextureManager.h"
 #include "../AssetManager.h"
 
-ColliderComponent::ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType, int x, int y, int width, int height) //: colliderType(colliderType)
+ColliderComponent::ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType)
 {
     componentName = "ColliderComponent";
     this->colliderTag = colliderTag;
     this->colliderType = colliderType;
-    this->collider = {x, y, width, height};
+    //this->collider = {x, y, width, height};
     texture = Game::assetManager->GetTexture(textureID);
 }
 
@@ -18,7 +18,11 @@ void ColliderComponent::Initialise()
 {
     transform = owner->GetComponent<TransformComponent>();
     if(!transform) { return; }
-    sourceRect = {0, 0, transform->width, transform->height};
+    collider.x = static_cast<int>(transform->position.x);
+    collider.y = static_cast<int>(transform->position.y);
+    collider.w = transform->width * transform->scale;
+    collider.h = transform->height * transform->scale;
+    sourceRect = {0, 0, collider.w, collider.h};
     destinationRect = {collider.x, collider.y, collider.w, collider.h};
 }
         

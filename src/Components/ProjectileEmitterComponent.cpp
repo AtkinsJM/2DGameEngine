@@ -48,6 +48,6 @@ Entity& ProjectileEmitterComponent::SpawnProjectile()
     Entity& projectile = entityManager.AddEntity("projectile", PROJECTILE_LAYER);
     projectile.AddComponent<TransformComponent>(transform->position.x + 16, transform->position.y + 16, 0, 0, 4, 4, 1);
     projectile.AddComponent<SpriteComponent>("projectile-texture");
-    projectile.AddComponent<ColliderComponent>("collision-texture", "Projectile", ColliderType::PROJECTILE_ENEMY, transform->position.x + 16, transform->position.y + 16, 4, 4);
+    projectile.AddComponent<ColliderComponent>("collision-texture", "Projectile", ColliderType::PROJECTILE_ENEMY);
     projectile.AddComponent<ProjectileComponent>(speed, range, angleRad);
 }

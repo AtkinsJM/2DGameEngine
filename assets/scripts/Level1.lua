@@ -8,7 +8,8 @@ Level1 = {
         [5] = { type="texture", id = "projectile-texture", file = "./assets/images/bullet-enemy.png" },
         [6] = { type="font", id = "charriot-font", file = "./assets/fonts/charriot.ttf", fontSize = 16 },
         [7] = { type="font", id = "charriot-font-small", file = "./assets/fonts/charriot.ttf", fontSize = 12 },
-        [8] = { type="texture", id = "radar-texture", file = "./assets/images/radar.png" }
+        [8] = { type="texture", id = "radar-texture", file = "./assets/images/radar.png" },
+        [9] = { type="texture", id = "collision-texture", file = "./assets/images/collision-texture.png" }
     },
     map = {
         textureAssetId = "terrain-texture-night",
@@ -80,7 +81,7 @@ Level1 = {
                         y = 100
                     },
                     velocity = {
-                        x = 0,
+                        x = 50,
                         y = 0
                     },
                     width = 32,
@@ -112,6 +113,49 @@ Level1 = {
                     angle = 0,
                     spawnDelay = 2.0,
                     isLooping = true;
+                }
+            }
+        },
+        [2] = {
+            name = "radar",
+            layer = 5,
+            components = {
+                transform = {
+                    position = {
+                        x = 720,
+                        y = 15
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 64,
+                    height = 64,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "radar-texture",
+                    animated = true,
+                    frameCount = 8,
+                    animationSpeed = 150,
+                    directional = false,
+                    fixed = true
+                }
+            }
+        },
+        [3] = {
+            name = "labelLevelName",
+            layer = 5,
+            components = {
+                label = {
+                    position = {
+                        x = 10,
+                        y = 10
+                    },
+                    text = "Level 1",
+                    fontId = "charriot-font",
+                    color = XXXXX
                 }
             }
         }

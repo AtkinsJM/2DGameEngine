@@ -21,7 +21,7 @@ class ColliderComponent : public Component
         
         ColliderType colliderType;
 
-        ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType, int x, int y, int w, int h);
+        ColliderComponent(std::string textureID, std::string colliderTag, ColliderType colliderType);
         void Initialise() override;
         void Update(float deltaTime) override;
         void Render() override;
