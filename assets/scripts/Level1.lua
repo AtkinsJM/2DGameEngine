@@ -28,6 +28,10 @@ Level1 = {
                         x = 200,
                         y = 200
                     },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
                     width = 32,
                     height = 32,
                     scale = 1,
@@ -38,6 +42,7 @@ Level1 = {
                     animated = true,
                     frameCount = 2,
                     animationSpeed = 90,
+                    directional = true,
                     fixed = false
                 },
                 collider = {
@@ -73,6 +78,10 @@ Level1 = {
                     position = {
                         x = 0,
                         y = 100
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
                     },
                     width = 32,
                     height = 32,

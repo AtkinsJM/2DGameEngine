@@ -75,7 +75,9 @@ void Game::LoadLevel(int levelNumber)
     std::string levelName = "Level" + std::to_string(levelNumber);
     lua.script_file("assets/scripts/" + levelName + ".lua");
 
-    // Load assets from Lua file
+    /*****************************************************/
+    /* LOAD ASSETS FROM LUA CONFIG FILE                  */
+    /*****************************************************/
     sol::table levelData = lua[levelName];
     sol::table levelAssets = levelData["assets"];
 
@@ -83,14 +85,13 @@ void Game::LoadLevel(int levelNumber)
     while(true)
     {
         sol::optional<sol::table> existsAssetIndexNode = levelAssets[assetIndex];
-        if(existsAssetIndexNode == sol::nullopt)
-        {
-            break;
-        }
+        if(existsAssetIndexNode == sol::nullopt) { break; }
+
         sol::table asset = levelAssets[assetIndex];
         std::string assetType = asset["type"];
         std::string assetID = asset["id"];
         std::string assetFile = asset["file"];
+
         if(assetType == "texture")
         {
             assetManager->AddTexture(assetID, assetFile.c_str());
@@ -102,6 +103,20 @@ void Game::LoadLevel(int levelNumber)
         }
         assetIndex++;
     }
+
+    /*****************************************************/
+    /* LOAD MAP AND TILE DATA FROM LUA CONFIG FILE       */
+    /*****************************************************/
+    sol::table levelMap = levelData["map"];
+    std::string mapTextureID = levelMap["textureAssetId"];
+    std::string mapFile = levelMap["file"];
+    int mapScale = levelMap["scale"];
+    int tileSize = levelMap["tileSize"];
+    int mapSizeX = levelMap["mapSizeX"];
+    int mapSizeY = levelMap["mapSizeY"];
+
+    map = new Map(mapTextureID, mapScale, tileSize);
+    map->LoadMap(mapFile.c_str(), mapSizeX, mapSizeY);
 
 
 /* 
@@ -115,10 +130,10 @@ void Game::LoadLevel(int levelNumber)
     assetManager->AddFont("charriot-font", std::string("assets/fonts/charriot.ttf").c_str(), 16);
     assetManager->AddFont("charriot-font-small", std::string("assets/fonts/charriot.ttf").c_str(), 12);
     assetManager->AddFont("arial-font", std::string("assets/fonts/arial.ttf").c_str(), 14);
-*/ 
+ 
     map = new Map("terrain-texture-day", 2, 32);
     map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
-
+*/
     //Add new entities and their components to EntityManager
 
     Entity& tankEntity = entityManager.AddEntity("tank_1", ENEMY_LAYER);
