@@ -33,6 +33,7 @@ enum ColliderType
 
 const unsigned int NUM_LAYERS = 6;
 
+//TODO be able to include colors in Lua config file
 const SDL_Color WHITE_COLOR = {255, 255, 255, 255};
 const SDL_Color RED_COLOR = {255, 0, 0, 255};
 const SDL_Color GREEN_COLOR = {0, 255, 0, 255};

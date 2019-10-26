@@ -26,6 +26,9 @@ bool Game::bShowColliders = false;
 bool Game::bShowObjectLabels = false;
 Map* map;
 Entity* player;
+Entity* labelPlayerPosition;
+int Game::playAreaWidth = WINDOW_WIDTH;
+int Game::playAreaHeight = WINDOW_HEIGHT;
 
 Game::Game()
 {
@@ -116,6 +119,12 @@ void Game::LoadLevel(int levelNumber)
     int mapSizeX = levelMap["mapSizeX"];
     int mapSizeY = levelMap["mapSizeY"];
 
+    playAreaWidth = tileSize * mapScale * mapSizeX;
+    playAreaHeight = tileSize * mapScale * mapSizeY;
+
+    std::cout << "Width: " << playAreaWidth << std::endl;
+    std::cout << "Height: " << playAreaHeight << std::endl;
+
     map = new Map(mapTextureID, mapScale, tileSize);
     map->LoadMap(mapFile.c_str(), mapSizeX, mapSizeY);
 
@@ -136,12 +145,7 @@ void Game::LoadLevel(int levelNumber)
         LayerType entityLayerType = static_cast<LayerType>(entity["layer"]);
 
         Entity& newEntity = entityManager.AddEntity(entityName, entityLayerType);
-        
-        // TODO find a better way of assigning player entity
-        if(entityName == "player")
-        {
-            player = &newEntity;
-        }        
+         
         
         sol::table entityComponents = entity["components"];
         
@@ -158,7 +162,7 @@ void Game::LoadLevel(int levelNumber)
             int scale = transform["scale"];
             int rotation = transform["rotation"];
             // TODO add rotation to constructor
-            newEntity.AddComponent<TransformComponent>(posX, posY, velX, velY, width, height, scale);
+            newEntity.AddComponent<TransformComponent>(posX, posY, velX, velY, width, height, scale, rotation);
         }
         
         sol::optional<sol::table> existsSpriteComponent = entityComponents["sprite"];
@@ -187,7 +191,6 @@ void Game::LoadLevel(int levelNumber)
             sol::table collider = entityComponents["collider"];
             std::string tag = collider["tag"];
             int colliderType = collider["collisionType"];
-            
             newEntity.AddComponent<ColliderComponent>(tag, static_cast<ColliderType>(colliderType));
         }
             
@@ -218,7 +221,7 @@ void Game::LoadLevel(int levelNumber)
             int posY = label["position"]["y"];
             std::string text = label["text"];
             std::string fontId = label["fontId"];
-            SDL_Color color = GREEN_COLOR;//label["color"];
+            SDL_Color color = {label["color"]["r"], label["color"]["g"], label["color"]["b"], label["color"]["a"]};
             newEntity.AddComponent<LabelComponent>(posX, posY, text, fontId, color);
         }
 
@@ -241,7 +244,7 @@ void Game::LoadLevel(int levelNumber)
             ColliderType projectileColliderType = static_cast<ColliderType>(projectileEmitter["projectile"]["colliderType"]);
 
             Entity* projectilePrefab = new Entity(entityManager, projectileName, projectileLayerType);
-            projectilePrefab->AddComponent<TransformComponent>(0, 0, 0, 0, projectileSize, projectileSize, projectileScale);
+            projectilePrefab->AddComponent<TransformComponent>(0, 0, 0, 0, projectileSize, projectileSize, projectileScale, angle);
             projectilePrefab->AddComponent<SpriteComponent>(textureAssetId);
             projectilePrefab->AddComponent<ColliderComponent>(projectileColliderTag, projectileColliderType);
             projectilePrefab->AddComponent<ProjectileComponent>(speed, range, angle);
@@ -250,6 +253,10 @@ void Game::LoadLevel(int levelNumber)
         }        
         entityIndex++;
     }
+
+    player = entityManager.GetEntityByName("player");
+    labelPlayerPosition = entityManager.GetEntityByName("labelPlayerPosition");
+
 /* 
     assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
@@ -340,6 +347,12 @@ void Game::Update()
     entityManager.Update(deltaTime);
 
     HandleCameraMovement();
+    if(labelPlayerPosition && player)
+    {
+        glm::vec2 playerPosition = player->GetComponent<TransformComponent>()->position;
+        std::string text = "Position: (" + std::to_string(static_cast<int>(playerPosition.x)) + ", " + std::to_string(static_cast<int>(playerPosition.y)) + ")";
+        labelPlayerPosition->GetComponent<LabelComponent>()->SetLabelText(text);
+    }
 }
 
 void Game::Render()
@@ -362,11 +375,9 @@ void Game::HandleCameraMovement()
     TransformComponent* playerTransform = player->GetComponent<TransformComponent>();
     camera.x = playerTransform->position.x - (WINDOW_WIDTH / 2);
     camera.y = playerTransform->position.y - (WINDOW_HEIGHT / 2);
-    // TODO: sort for map scale
-    camera.x = camera.x < 0 ? 0 : camera.x;
-    camera.x = camera.x > camera.w ? camera.w : camera.x;
-    camera.y = camera.y < 0 ? 0 : camera.y;
-    camera.y = camera.y > camera.h ? camera.h : camera.y;
+
+    camera.x = glm::clamp(camera.x, 0, playAreaWidth - camera.w);
+    camera.y = glm::clamp(camera.y, 0, playAreaHeight - camera.h);
 }
 
 void Game::Destroy()

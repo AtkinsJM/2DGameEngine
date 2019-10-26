@@ -66,6 +66,18 @@ void EntityManager::ListAllEntities()
     }
 }
 
+Entity* EntityManager::GetEntityByName(std::string entityName) const
+{
+    for(auto &entity : entities)
+    {
+        if(entity->EntityName() == entityName)
+        {
+            return entity;
+        }
+    }
+    return nullptr;
+}
+
 std::vector<Entity*> EntityManager::GetEntitiesByLayer(LayerType layer) const
 {
     std::vector<Entity*> entitiesInLayer;
@@ -105,7 +117,7 @@ Entity& EntityManager::Instantiate(Entity* prefab, int posX, int posY)
     if(prefab->HasComponent<TransformComponent>())
     {
         TransformComponent* prefabTransform = prefab->GetComponent<TransformComponent>();
-        entity.AddComponent<TransformComponent>(posX, posY, prefabTransform->velocity.x, prefabTransform->velocity.y, prefabTransform->width, prefabTransform->height, prefabTransform->scale);
+        entity.AddComponent<TransformComponent>(posX, posY, prefabTransform->velocity.x, prefabTransform->velocity.y, prefabTransform->width, prefabTransform->height, prefabTransform->scale, prefabTransform->rotation);
     }
     if(prefab->HasComponent<SpriteComponent>())
     {

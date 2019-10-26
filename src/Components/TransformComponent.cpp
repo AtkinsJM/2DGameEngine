@@ -2,12 +2,11 @@
 #include <SDL2/SDL.h>
 #include "../Game.h"
 #include "../../lib/glm/glm.hpp"
-// TODO: remove
 #include "../Entity.h"
 #include "KeyboardControlComponent.h"
 #include "../Map.h"
 
-TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s)
+TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, int w, int h, int s, int r)
 {
     componentName = "TransformComponent";
     position = glm::vec2(posX, posY);
@@ -15,6 +14,7 @@ TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, i
     width = w;
     height = h;
     scale = s;
+    rotation = r;
 }
 
 void TransformComponent::Initialise() 
@@ -27,9 +27,8 @@ void TransformComponent::Update(float deltaTime)
     position += velocity * deltaTime;
     if(owner->HasComponent<KeyboardControlComponent>())
     {
-        // TODO: get map width and height for max clamp
-        //position.x = Clamp(position.x, 0.0f, Game::map - width);
-        //position.y = Clamp(position.y, 0.0f, 600.0f - height);
+        position.x = glm::clamp(position.x, 0.0f, static_cast<float>(Game::playAreaWidth -width));
+        position.y = glm::clamp(position.y, 0.0f, static_cast<float>(Game::playAreaHeight - height));
     }
     
 }

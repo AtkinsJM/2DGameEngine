@@ -16,6 +16,7 @@ class EntityManager
         void Render();
         bool HasEntities() { return entities.size() > 0; };
         Entity& AddEntity(std::string entityName, LayerType layer);
+        Entity* GetEntityByName(std::string entityName) const;
         std::vector<Entity*> GetEntities() const { return entities; };
         std::vector<Entity*> GetEntitiesByLayer(LayerType layer) const;
         unsigned int GetEntityCount() { return entities.size(); };

@@ -27,6 +27,9 @@ class Game
         static SDL_Rect camera;
         static bool bShowColliders;
         static bool bShowObjectLabels;
+        static int playAreaWidth;
+        static int playAreaHeight;
+
     private:
         bool bIsRunning;
         SDL_Window* window;

@@ -9,6 +9,34 @@ else
     mapTextureAssetId = "terrain-texture-night"
 end
 
+local WHITE_COLOR = {
+    r = 255, 
+    g = 255, 
+    b = 255, 
+    a = 255
+}
+
+local RED_COLOR = {
+    r = 255, 
+    g = 0, 
+    b = 0, 
+    a = 255
+}
+
+local GREEN_COLOR = {
+    r = 0,
+    g = 255,
+    b = 0,
+    a = 255
+}
+
+local BLUE_COLOR = {
+    r = 0,
+    g = 0,
+    b = 255,
+    a = 255
+}
+
 Level1 = {
     assets = {
         [0] = { type="texture", id = "terrain-texture-day", file = "./assets/tilemaps/jungle.png" },
@@ -45,9 +73,10 @@ Level1 = {
         [31] = { type="texture", id = "bullet-friendly-texture", file = "./assets/images/bullet-friendly.png" },
         [32] = { type="texture", id = "radar-texture", file = "./assets/images/radar.png" },
         [33] = { type="sound", id = "blades-sound", file = "./assets/sounds/blades.wav" },
-        [34] = { type="font", id = "charriot-font", file = "./assets/fonts/charriot.ttf", fontSize = 16 },
+        [34] = { type="font", id = "charriot-font", file = "./assets/fonts/charriot.ttf", fontSize = 15 },
         [35] = { type="font", id = "charriot-font-small", file = "./assets/fonts/charriot.ttf", fontSize = 12 },
-        [36] = { type="texture", id = "collision-texture", file = "./assets/images/collision-texture.png" }
+        [36] = { type="font", id = "charriot-font-large", file = "./assets/fonts/charriot.ttf", fontSize = 18 },
+        [37] = { type="texture", id = "collision-texture", file = "./assets/images/collision-texture.png" }
     },
     map = {
         textureAssetId = mapTextureAssetId,
@@ -104,7 +133,7 @@ Level1 = {
                     },
                     text = "Player",
                     fontId = "charriot-font-small",
-                    color = XXXXX
+                    color = GREEN_COLOR
                 }
             }
         },
@@ -141,7 +170,7 @@ Level1 = {
                     },
                     text = "Enemy",
                     fontId = "charriot-font-small",
-                    color = XXXXX
+                    color = RED_COLOR
                 },
                 projectileEmitter = {
                     speed = 125,
@@ -200,8 +229,23 @@ Level1 = {
                         y = 10
                     },
                     text = "Level 1",
+                    fontId = "charriot-font-large",
+                    color = WHITE_COLOR
+                }
+            }
+        },
+        [4] = {
+            name = "labelPlayerPosition",
+            layer = 5,
+            components = {
+                label = {
+                    position = {
+                        x = 10,
+                        y = 40
+                    },
+                    text = "Position: (x, y)",
                     fontId = "charriot-font",
-                    color = XXXXX
+                    color = WHITE_COLOR
                 }
             }
         }
