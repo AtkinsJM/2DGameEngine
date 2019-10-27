@@ -20,7 +20,7 @@ enum LayerType
     ENEMY_LAYER = 2,
     PLAYER_LAYER = 3,
     PROJECTILE_LAYER = 4,
-    UI_LAYER = 5
+    UI_LAYER = 5,
 };
 
 enum ColliderType
@@ -28,7 +28,8 @@ enum ColliderType
     PLAYER = 0,
     ENEMY = 1,
     PROJECTILE_PLAYER = 2,
-    PROJECTILE_ENEMY = 3
+    PROJECTILE_ENEMY = 3,
+    LEVEL_COMPLETE = 4
 };
 
 const unsigned int NUM_LAYERS = 6;

@@ -231,6 +231,7 @@ void Game::LoadLevel(int levelNumber)
             sol::table projectileEmitter = entityComponents["projectileEmitter"];
             int speed = projectileEmitter["speed"];
             int range = projectileEmitter["range"];
+            // TODO have angle as a property of the projectile, not the emitter
             int angle = projectileEmitter["angle"];
             float spawnDelay = projectileEmitter["spawnDelay"];
             bool bIsLooping = projectileEmitter["isLooping"];
@@ -247,7 +248,8 @@ void Game::LoadLevel(int levelNumber)
             projectilePrefab->AddComponent<TransformComponent>(0, 0, 0, 0, projectileSize, projectileSize, projectileScale, angle);
             projectilePrefab->AddComponent<SpriteComponent>(textureAssetId);
             projectilePrefab->AddComponent<ColliderComponent>(projectileColliderTag, projectileColliderType);
-            projectilePrefab->AddComponent<ProjectileComponent>(speed, range, angle);
+            float angleRad = glm::radians(static_cast<float>(angle));
+            projectilePrefab->AddComponent<ProjectileComponent>(speed, range, angleRad);
 
             newEntity.AddComponent<ProjectileEmitterComponent>(projectilePrefab, speed, range, angle, spawnDelay, bIsLooping);
         }        
