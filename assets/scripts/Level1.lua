@@ -93,8 +93,8 @@ Level1 = {
             components = {
                 transform = {
                     position = {
-                        x = 200,
-                        y = 200
+                        x = 240,
+                        y = 112
                     },
                     velocity = {
                         x = 0,
@@ -143,11 +143,11 @@ Level1 = {
             components = {
                 transform = {
                     position = {
-                        x = 0,
-                        y = 100
+                        x = 115,
+                        y = 500
                     },
                     velocity = {
-                        x = 50,
+                        x = 0,
                         y = 0
                     },
                     width = 32,
@@ -173,8 +173,8 @@ Level1 = {
                     color = RED_COLOR
                 },
                 projectileEmitter = {
-                    speed = 125,
-                    range = 375,
+                    speed = 100,
+                    range = 300,
                     angle = 0,
                     spawnDelay = 2.0,
                     isLooping = true,
@@ -186,12 +186,434 @@ Level1 = {
                         scale = 1,
                         colliderTag = "Projectile",
                         colliderType = 3
-                    }
-                    
+                    }  
                 }
             }
         },
         [2] = {
+            name = "tank-enemy-2",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 1060,
+                        y = 165
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-right-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 0,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [3] = {
+            name = "tank-enemy-3",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 235,
+                        y = 950
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-left-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 180,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [4] = {
+            name = "tank-enemy-4",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 465,
+                        y = 370
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-left-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 180,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [4] = {
+            name = "tank-enemy-4",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 1270,
+                        y = 300
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-left-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 180,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [5] = {
+            name = "tank-enemy-5",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 890,
+                        y = 480
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-left-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 180,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [6] = {
+            name = "tank-enemy-5",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 515,
+                        y = 675
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-right-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 0,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [7] = {
+            name = "tank-enemy-5",
+            layer = 2,
+            components = {
+                transform = {
+                    position = {
+                        x = 1125,
+                        y = 550
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "tank-big-right-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "ENEMY",
+                    collisionType = 1
+                },
+                label = {
+                    position = {
+                        x = 0,
+                        y = 40
+                    },
+                    text = "Enemy",
+                    fontId = "charriot-font-small",
+                    color = RED_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 0,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "projectile-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 3
+                    }  
+                }
+            }
+        },
+        [8] = {
+            name = "start-pad",
+            layer = 1,
+            components = {
+                transform = {
+                    position = {
+                        x = 240,
+                        y = 112
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "start-texture",
+                    animated = false
+                }
+            }
+        },
+        [9] = {
+            name = "heliport",
+            layer = 1,
+            components = {
+                transform = {
+                    position = {
+                        x = 1395,
+                        y = 495
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    },
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                sprite = {
+                    textureAssetId = "heliport-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "LEVEL_COMPLETE",
+                    colliderType = 4
+                }
+            }
+        },
+        [10] = {
             name = "radar",
             layer = 5,
             components = {
@@ -219,7 +641,7 @@ Level1 = {
                 }
             }
         },
-        [3] = {
+        [11] = {
             name = "labelLevelName",
             layer = 5,
             components = {
@@ -234,7 +656,7 @@ Level1 = {
                 }
             }
         },
-        [4] = {
+        [12] = {
             name = "labelPlayerPosition",
             layer = 5,
             components = {
