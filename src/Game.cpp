@@ -161,7 +161,6 @@ void Game::LoadLevel(int levelNumber)
             int height = transform["height"];
             int scale = transform["scale"];
             int rotation = transform["rotation"];
-            // TODO add rotation to constructor
             newEntity.AddComponent<TransformComponent>(posX, posY, velX, velY, width, height, scale, rotation);
         }
         
@@ -252,54 +251,16 @@ void Game::LoadLevel(int levelNumber)
             projectilePrefab->AddComponent<ProjectileComponent>(speed, range, angleRad);
 
             newEntity.AddComponent<ProjectileEmitterComponent>(projectilePrefab, speed, range, angle, spawnDelay, bIsLooping);
-        }        
+
+        }   
+        newEntity.InitialiseComponents();     
         entityIndex++;
     }
 
     player = entityManager.GetEntityByName("player");
     labelPlayerPosition = entityManager.GetEntityByName("labelPlayerPosition");
 
-/* 
-    assetManager->AddTexture("tank-image", std::string("assets/images/tank-big-right.png").c_str());
-    assetManager->AddTexture("helicopter-image", std::string("assets/images/chopper-spritesheet.png").c_str());
-    assetManager->AddTexture("radar-image", std::string("assets/images/radar.png").c_str());
-    assetManager->AddTexture("jungle-tilemap", std::string("assets/tilemaps/jungle.png").c_str());
-    assetManager->AddTexture("collision-image", std::string("assets/images/collision-texture.png").c_str());
-    assetManager->AddTexture("projectile-image", std::string("assets/images/bullet-enemy.png").c_str());
-
-    assetManager->AddFont("charriot-font", std::string("assets/fonts/charriot.ttf").c_str(), 16);
-    assetManager->AddFont("charriot-font-small", std::string("assets/fonts/charriot.ttf").c_str(), 12);
-    assetManager->AddFont("arial-font", std::string("assets/fonts/arial.ttf").c_str(), 14);
- 
-    map = new Map("terrain-texture-day", 2, 32);
-    map->LoadMap(std::string("assets/tilemaps/jungle.map").c_str(), 25, 20);
-
-    //Add new entities and their components to EntityManager
-
-    Entity& tankEntity = entityManager.AddEntity("tank_1", ENEMY_LAYER);
-    tankEntity.AddComponent<TransformComponent>(0, 100, 50, 0, 32, 32, 1);
-    tankEntity.AddComponent<SpriteComponent>("tank-texture-big-right");
-    tankEntity.AddComponent<ColliderComponent>("collision-texture", "Enemy", ColliderType::ENEMY, 0, 100, 32, 32);
-    tankEntity.AddComponent<LabelComponent>(0, 40, "Enemy", "charriot-font-small", RED_COLOR);
-    tankEntity.AddComponent<ProjectileEmitterComponent>(125, 375, 0, 2.0f, true);
-    
-
-    Entity& helicopterEntity = entityManager.AddEntity("helicopter_1", PLAYER_LAYER);
-    helicopterEntity.AddComponent<TransformComponent>(200, 200, 0, 100, 32, 32, 1);
-    helicopterEntity.AddComponent<SpriteComponent>("helicopter-texture", 2, 90, true, false);
-    helicopterEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
-    helicopterEntity.AddComponent<ColliderComponent>("collision-texture", "Player", ColliderType::PLAYER, 200, 200, 32, 32);
-    helicopterEntity.AddComponent<LabelComponent>(0, 40, "Player", "charriot-font-small", GREEN_COLOR);
-    player = &helicopterEntity;
-
-    Entity& radarEntity = entityManager.AddEntity("radar", UI_LAYER);
-    radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-    radarEntity.AddComponent<SpriteComponent>("radar-texture", 8, 150, false, true);
-
-    Entity& labelLevelName = entityManager.AddEntity("LabelLevelName", UI_LAYER);
-    labelLevelName.AddComponent<LabelComponent>(10, 10, "Level 1", "charriot-font", WHITE_COLOR);
     //entityManager.ListAllEntities();
-*/
 }
 
 void Game::ProcessInput()

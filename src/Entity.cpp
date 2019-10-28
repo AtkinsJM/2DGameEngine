@@ -17,6 +17,14 @@ Entity::Entity(EntityManager& manager, std::string name, LayerType layer) :  ent
     this->bIsActive = true;
 }
 
+void Entity::InitialiseComponents()
+{
+    for(auto &component : components)
+    {
+        component->Initialise();
+    }
+}
+
 void Entity::Update(float deltaTime)
 {
     for(auto &component : components)

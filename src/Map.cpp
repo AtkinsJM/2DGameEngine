@@ -6,6 +6,7 @@
 #include "Constants.h"
 
 #include <fstream>
+#include <iostream>
 
 extern EntityManager entityManager;
 
@@ -41,4 +42,6 @@ void Map::AddTile(int sourceRectX, int sourceRectY, int x, int y)
 {
     Entity& newTile = entityManager.AddEntity("Tile", LayerType::TILEMAP_LAYER);
     newTile.AddComponent<TileComponent>(textureID, sourceRectX, sourceRectY, x, y, tileSize, scale);
+    //std::cout << "About to initialise tile!" << std::endl;
+    newTile.InitialiseComponents();
 }

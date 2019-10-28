@@ -21,6 +21,7 @@ class Entity
         void Render();
         void Destroy();
         bool IsActive() const { return bIsActive; };
+        void InitialiseComponents();
 
         void DisplayInfo();
         void CheckCollisions();
@@ -37,7 +38,7 @@ class Entity
             newComponent->owner = this;
             components.push_back(newComponent);
             componentTypeMap.emplace(&typeid(*newComponent), newComponent);
-            newComponent->Initialise();
+            //newComponent->Initialise();
             return *newComponent;
         }
 
