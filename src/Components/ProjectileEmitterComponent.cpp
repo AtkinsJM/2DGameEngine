@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
 #include "ColliderComponent.h"
+#include "KeyboardControlComponent.h"
 #include "../EntityManager.h"
 #include "ProjectileComponent.h"
 #include <SDL2/SDL.h>
@@ -17,6 +18,7 @@ ProjectileEmitterComponent::ProjectileEmitterComponent(Entity* projectilePrefab,
     this->speed = speed;
     this->range = range;
     this->bIsLooping = bIsLooping;
+    this->bCanFire = true;
     this->angleRad = glm::radians(static_cast<float>(angleDeg));
     this->spawnDelay = spawnDelay;
 }
@@ -33,9 +35,12 @@ void ProjectileEmitterComponent::Update(float deltaTime)
     // If time since last spawn greater than spawn delay
     if((SDL_GetTicks() - lastSpawnTime) / 1000.0f > spawnDelay)
     {
+        bCanFire = true;
         // Spawn a new projectile
-        SpawnProjectile();
-        lastSpawnTime = SDL_GetTicks();
+        if(!owner->GetComponent<KeyboardControlComponent>())
+        {
+            SpawnProjectile(angleRad);  
+        }
     }
 }
 
@@ -44,15 +49,14 @@ void ProjectileEmitterComponent::Render()
 
 }
 
-Entity& ProjectileEmitterComponent::SpawnProjectile()
+void ProjectileEmitterComponent::SpawnProjectile(float angle)
 {
-    Entity& projectile = entityManager.Instantiate(projectilePrefab, transform->position.x + transform->width/2, transform->position.y + transform->height/2);
-
-    /*
-    Entity& projectile = entityManager.AddEntity(projectilePrefab->EntityName(), projectilePrefab->layer);
-    projectile.AddComponent<TransformComponent>(transform->position.x + transform->width/2, transform->position.y + transform->height/2, 0, 0, projectilePrefab->GetComponent<TransformComponent>()->width, projectilePrefab->GetComponent<TransformComponent>()->height, 1);
-    projectile.AddComponent<SpriteComponent>("projectile-texture");
-    projectile.AddComponent<ColliderComponent>("collision-texture", "Projectile", ColliderType::PROJECTILE_ENEMY);
-    projectile.AddComponent<ProjectileComponent>(speed, range, angleRad);
-    */
+    if(!bCanFire) { return; }
+    int projectilePosX = transform->position.x + (transform->width / 2) - (projectilePrefab->GetComponent<TransformComponent>()->width / 2);
+    int projectilePosY = transform->position.y + (transform->height / 2) - (projectilePrefab->GetComponent<TransformComponent>()->width / 2);
+    Entity& projectile = entityManager.Instantiate(projectilePrefab, projectilePosX, projectilePosY);
+    projectile.GetComponent<ProjectileComponent>()->angleRad = angle;
+    projectile.InitialiseComponents();
+    bCanFire = false;
+    lastSpawnTime = SDL_GetTicks();
 }

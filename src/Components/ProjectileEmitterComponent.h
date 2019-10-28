@@ -13,7 +13,7 @@ class ProjectileEmitterComponent: public Component
         void Initialise() override;
         void Update(float deltaTime) override;
         void Render() override;
-        Entity& SpawnProjectile();
+        void SpawnProjectile(float angle);
     private:
         TransformComponent* transform;
         glm::vec2 origin;
@@ -24,6 +24,7 @@ class ProjectileEmitterComponent: public Component
         float lastSpawnTime;
         float spawnDelay;
         Entity* projectilePrefab;
+        bool bCanFire;
 };
 
 #endif

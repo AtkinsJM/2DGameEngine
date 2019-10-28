@@ -73,6 +73,7 @@ void SpriteComponent::SetTexture(std::string textureID)
 void SpriteComponent::Initialise()
 {
     transform = owner->GetComponent<TransformComponent>();
+    if(!transform) { return; }
     sourceRect.x = 0;
     sourceRect.y = 0;
     sourceRect.w = transform->width;

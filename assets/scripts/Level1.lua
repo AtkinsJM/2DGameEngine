@@ -134,6 +134,22 @@ Level1 = {
                     text = "Player",
                     fontId = "charriot-font-small",
                     color = GREEN_COLOR
+                },
+                projectileEmitter = {
+                    speed = 100,
+                    range = 300,
+                    angle = 0,
+                    spawnDelay = 2.0,
+                    isLooping = true,
+                    projectile = {
+                        name = "projectile",
+                        layer = 4,
+                        textureAssetId = "bullet-friendly-texture",
+                        size = 4,
+                        scale = 1,
+                        colliderTag = "Projectile",
+                        colliderType = 2
+                    }  
                 }
             }
         },

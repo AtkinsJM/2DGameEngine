@@ -19,9 +19,9 @@ TransformComponent::TransformComponent(int posX, int posY, int velX, int velY, i
 
 void TransformComponent::Initialise() 
 {
-
+   
 }
-        
+     
 void TransformComponent::Update(float deltaTime)
 {
     position += velocity * deltaTime;

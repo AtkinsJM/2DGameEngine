@@ -1,11 +1,13 @@
 #include "KeyboardControlComponent.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
+#include "ProjectileEmitterComponent.h"
 #include "../Game.h"
 #include "../Entity.h"
-
+#include "../../lib/glm/glm.hpp"
 #include <iostream>
 #include <string>
+
 
 KeyboardControlComponent::KeyboardControlComponent()
 {
@@ -54,8 +56,11 @@ void KeyboardControlComponent::Initialise()
 {
     transform = owner->GetComponent<TransformComponent>();
     sprite = owner->GetComponent<SpriteComponent>();
+    projectileEmitter = owner->GetComponent<ProjectileEmitterComponent>();
+    if(!transform) { return; }
     transform->velocity.x = 0;
     transform->velocity.y = 0;
+    directionVec = glm::vec2(0,1);
 }
 
 void KeyboardControlComponent::Update(float deltaTime)
@@ -68,28 +73,41 @@ void KeyboardControlComponent::Update(float deltaTime)
             transform->velocity.x = 0;
             transform->velocity.y = -100;
             sprite->PlayAnim("UpAnimation");
+            directionVec = glm::vec2(0, -1);
         }
         else if(keyCode == downKey)
         {
             transform->velocity.x = 0;
             transform->velocity.y = 100;
             sprite->PlayAnim("DownAnimation");
+            directionVec = glm::vec2(0, 1);
         }
         if(keyCode == rightKey)
         {
             transform->velocity.x = 100;
             transform->velocity.y = 0;
             sprite->PlayAnim("RightAnimation");
+            directionVec = glm::vec2(1, 0);
         }
         else if(keyCode == leftKey)
         {
             transform->velocity.x = -100;
             transform->velocity.y = 0;
             sprite->PlayAnim("LeftAnimation");
+            directionVec = glm::vec2(-1, 0);
         }
         else if(keyCode == shootKey)
         {
-            
+            if(projectileEmitter)
+            {
+                //std::cout << "Spawning projectile now..." << std::endl;
+                std::cout << "(" << directionVec.x << ", " << directionVec.y << ")" << std::endl;
+                glm::vec2 originVec = glm::vec2(1, 0);
+                float cosAngle = glm::dot(directionVec, originVec);
+                float angle = glm::acos(cosAngle) * (directionVec.x + directionVec.y);
+                std::cout << "Cos angle: " << cosAngle << ", Angle: " << angle << std::endl;
+                projectileEmitter->SpawnProjectile(angle);
+            }
         }
     }
 
