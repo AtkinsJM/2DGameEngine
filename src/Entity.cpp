@@ -43,6 +43,7 @@ void Entity::Render()
 
 void Entity::Destroy()
 {
+    std::cout << entityName << " destroyed!" << std::endl;
     this->bIsActive = false;
 }
 
@@ -82,30 +83,36 @@ void Entity::CheckCollisions()
         }
     }
     currentCollisions = collisionEntities;
-
 }
 
 void Entity::OnBeginCollision(Entity* otherEntity)
 {
-    std::cout << entityName << " started colliding with " << otherEntity->EntityName() << std::endl;
+    
     if(GetComponent<ColliderComponent>()->colliderType == ColliderType::PLAYER && otherEntity->GetComponent<ColliderComponent>()->colliderType == ColliderType::ENEMY)
     {
+        // Player lose life
         std::cout << "Game over!" << std::endl;
     }
     else if (GetComponent<ColliderComponent>()->colliderType == ColliderType::PLAYER && otherEntity->GetComponent<ColliderComponent>()->colliderType == ColliderType::PROJECTILE_ENEMY)
     {
+        // Player lose life
         otherEntity->Destroy();
         std::cout << "Take damage!" << std::endl;
         
+    }
+    else if (GetComponent<ColliderComponent>()->colliderType == ColliderType::ENEMY && otherEntity->GetComponent<ColliderComponent>()->colliderType == ColliderType::PROJECTILE_PLAYER)
+    {
+        otherEntity->Destroy();
+        Destroy();
     }
 }
 
 void Entity::OnContinueCollision(Entity* otherEntity)
 {
-    std::cout << entityName << " still colliding with " << otherEntity->EntityName() << std::endl;
+
 }
 
 void Entity::OnEndCollision(Entity* otherEntity)
 {
-    std::cout << entityName << " ended colliding with " << otherEntity->EntityName() << std::endl;
+
 }

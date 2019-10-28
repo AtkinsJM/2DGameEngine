@@ -100,12 +100,8 @@ void KeyboardControlComponent::Update(float deltaTime)
         {
             if(projectileEmitter)
             {
-                //std::cout << "Spawning projectile now..." << std::endl;
-                std::cout << "(" << directionVec.x << ", " << directionVec.y << ")" << std::endl;
-                glm::vec2 originVec = glm::vec2(1, 0);
-                float cosAngle = glm::dot(directionVec, originVec);
+                float cosAngle = glm::dot(directionVec, glm::vec2(1, 0));
                 float angle = glm::acos(cosAngle) * (directionVec.x + directionVec.y);
-                std::cout << "Cos angle: " << cosAngle << ", Angle: " << angle << std::endl;
                 projectileEmitter->SpawnProjectile(angle);
             }
         }

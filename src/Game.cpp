@@ -230,7 +230,6 @@ void Game::LoadLevel(int levelNumber)
             sol::table projectileEmitter = entityComponents["projectileEmitter"];
             int speed = projectileEmitter["speed"];
             int range = projectileEmitter["range"];
-            // TODO have angle as a property of the projectile, not the emitter
             int angle = projectileEmitter["angle"];
             float spawnDelay = projectileEmitter["spawnDelay"];
             bool bIsLooping = projectileEmitter["isLooping"];
@@ -259,8 +258,6 @@ void Game::LoadLevel(int levelNumber)
 
     player = entityManager.GetEntityByName("player");
     labelPlayerPosition = entityManager.GetEntityByName("labelPlayerPosition");
-
-    //entityManager.ListAllEntities();
 }
 
 void Game::ProcessInput()

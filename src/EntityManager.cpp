@@ -98,7 +98,6 @@ std::vector<Entity*> EntityManager::GetEntityCollisions(Entity* myEntity) const
     if(!myCollider) { return collisionEntities; }
     for(auto &entity : entities)
     {
-        //TODO: check equivalence relation
         if(entity != myEntity && entity->HasComponent<ColliderComponent>())
         {
             ColliderComponent* otherCollider = entity->GetComponent<ColliderComponent>();
