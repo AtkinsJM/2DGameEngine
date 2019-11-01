@@ -8,6 +8,7 @@
 #include "Components/LabelComponent.h"
 #include "Components/ProjectileComponent.h"
 #include "Components/ProjectileEmitterComponent.h"
+#include "Components/PlayerComponent.h"
 
 void EntityManager::ClearData()
 {

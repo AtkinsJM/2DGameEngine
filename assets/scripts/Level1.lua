@@ -150,6 +150,9 @@ Level1 = {
                         colliderTag = "Projectile",
                         colliderType = 2
                     }  
+                },
+                player = {
+                    maxLives = 3
                 }
             }
         },

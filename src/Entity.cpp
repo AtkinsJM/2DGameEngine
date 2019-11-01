@@ -2,6 +2,7 @@
 #include "EntityManager.h"
 #include "Component.h"
 #include "Components/ColliderComponent.h"
+#include "Components/PlayerComponent.h"
 
 
 #include <iostream>
@@ -43,7 +44,6 @@ void Entity::Render()
 
 void Entity::Destroy()
 {
-    std::cout << entityName << " destroyed!" << std::endl;
     this->bIsActive = false;
 }
 
@@ -91,13 +91,21 @@ void Entity::OnBeginCollision(Entity* otherEntity)
     if(GetComponent<ColliderComponent>()->colliderType == ColliderType::PLAYER && otherEntity->GetComponent<ColliderComponent>()->colliderType == ColliderType::ENEMY)
     {
         // Player lose life
-        std::cout << "Game over!" << std::endl;
+        PlayerComponent* player = GetComponent<PlayerComponent>();
+        if(player)
+        {
+            player->LoseLife();
+        }
     }
     else if (GetComponent<ColliderComponent>()->colliderType == ColliderType::PLAYER && otherEntity->GetComponent<ColliderComponent>()->colliderType == ColliderType::PROJECTILE_ENEMY)
     {
         // Player lose life
+        PlayerComponent* player = GetComponent<PlayerComponent>();
+        if(player)
+        {
+            player->LoseLife();
+        }
         otherEntity->Destroy();
-        std::cout << "Take damage!" << std::endl;
         
     }
     else if (GetComponent<ColliderComponent>()->colliderType == ColliderType::ENEMY && otherEntity->GetComponent<ColliderComponent>()->colliderType == ColliderType::PROJECTILE_PLAYER)

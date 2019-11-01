@@ -10,6 +10,7 @@
 #include "Components/LabelComponent.h"
 #include "Components/ProjectileEmitterComponent.h"
 #include "Components/ProjectileComponent.h"
+#include "Components/PlayerComponent.h"
 #include "Entity.h"
 #include "AssetManager.h"
 #include <string>
@@ -251,7 +252,16 @@ void Game::LoadLevel(int levelNumber)
 
             newEntity.AddComponent<ProjectileEmitterComponent>(projectilePrefab, speed, range, angle, spawnDelay, bIsLooping);
 
-        }   
+        }  
+
+        sol::optional<sol::table> existsPlayerComponent = entityComponents["player"];
+        if(existsPlayerComponent != sol::nullopt)
+        {
+            sol::table player = entityComponents["player"];
+            int maxLives = player["maxLives"];
+            newEntity.AddComponent<PlayerComponent>(maxLives);
+        }
+
         newEntity.InitialiseComponents();     
         entityIndex++;
     }

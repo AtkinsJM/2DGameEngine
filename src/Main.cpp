@@ -2,10 +2,12 @@
 #include "Game.h"
 #include "Constants.h"
 
+Game* game = nullptr;
+
 int main(int argc, char* argv[])
 {
     //Instantiate and initialise new game
-    Game* game = new Game();
+    game = new Game();
     game->Initialise(WINDOW_WIDTH, WINDOW_HEIGHT);
     // Game loop
     while(game->IsRunning())

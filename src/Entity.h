@@ -14,6 +14,7 @@ class ColliderComponent;
 class Entity
 {
     public:
+        EntityManager& entityManager;
         LayerType layer;
         Entity(EntityManager& manager);
         Entity(EntityManager& manager, std::string name, LayerType layer);
@@ -56,7 +57,6 @@ class Entity
 
     private:
         std::string entityName;
-        EntityManager& entityManager;
         bool bIsActive;
         std::vector<Component*> components;
         std::map<const std::type_info*, Component*> componentTypeMap;
